@@ -173,6 +173,7 @@ const Learn = () => {
       ))}
     </div>
   </div>
-);
+  );
+};
 
 export default Learn;
