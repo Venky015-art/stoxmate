@@ -84,6 +84,9 @@ const StockDetail = () => {
               <p className="text-xs text-muted-foreground">{decodedSymbol}</p>
             </div>
           )}
+          <button onClick={handleToggleWatchlist} className="rounded-xl bg-secondary p-2 transition-colors hover:bg-secondary/80">
+            <Star className={`h-5 w-5 ${watched ? "fill-warning text-warning" : "text-muted-foreground"}`} />
+          </button>
         </div>
       </div>
 
