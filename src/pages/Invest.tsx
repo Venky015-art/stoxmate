@@ -245,6 +245,7 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
 
 const Invest = () => {
   const [active, setActive] = useState<typeof categoryKeys[number]>("all");
+  const [sector, setSector] = useState<Sector>("all");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const { t } = useLanguage();
