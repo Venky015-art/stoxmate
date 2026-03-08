@@ -284,10 +284,10 @@ const Invest = () => {
 
       {showMF && (
         <div className="space-y-2.5">
-          {(active === "All" && filteredMF.length > 0) && (
+          {(active === "all" && filteredMF.length > 0) && (
             <div className="flex items-center gap-2 pt-1">
               <TrendingUp className="h-3.5 w-3.5 text-foreground" />
-              <h3 className="font-display text-sm font-semibold text-foreground">Mutual Funds</h3>
+              <h3 className="font-display text-sm font-semibold text-foreground">{t("mutualFunds")}</h3>
               <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
                 {filteredMF.length}
               </span>
