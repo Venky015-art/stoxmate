@@ -318,6 +318,24 @@ const Invest = () => {
       </div>
 
       {showStocks && (
+        <div className="flex gap-1.5 overflow-x-auto pb-1">
+          {sectorKeys.map((s) => (
+            <button
+              key={s}
+              onClick={() => setSector(s)}
+              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-medium transition-all ${
+                sector === s
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-secondary/60 text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {sectorLabels[s]}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {showStocks && (
         <div className="space-y-2.5">
           {stocksLoading && quotes.length === 0
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`s-${i}`} />)
