@@ -120,7 +120,9 @@ const Invest = () => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.03 }}
-                  className="rounded-2xl border border-border bg-card p-4 shadow-card"
+                  onClick={() => navigate(`/stock/${encodeURIComponent(q.symbol)}`)}
+                  className="cursor-pointer rounded-2xl border border-border bg-card p-4 shadow-card transition-shadow hover:shadow-card-hover"
+                >
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-1">
