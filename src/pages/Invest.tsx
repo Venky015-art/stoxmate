@@ -7,8 +7,9 @@ import { useMarketData, type MarketQuote } from "@/hooks/useMarketData";
 import { useMutualFunds, type MutualFund } from "@/hooks/useMutualFunds";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const categories = ["All", "Stocks", "ETFs", "Mutual Funds"];
+const categoryKeys = ["all", "stocks", "etfs", "mutualFunds"] as const;
 
 const riskLevel = (symbol: string): string => {
   if (symbol.includes("GOLDBEES") || symbol.includes("NIFTYBEES")) return "Low";
