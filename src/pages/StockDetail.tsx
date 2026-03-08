@@ -38,14 +38,23 @@ const formatVolume = (v: number | undefined) => {
 const StockDetail = () => {
   const { symbol } = useParams<{ symbol: string }>();
   const navigate = useNavigate();
-  const [activeRange, setActiveRange] = useState(2); // default 1M
+  const [activeRange, setActiveRange] = useState(2);
+  const { user } = useAuth();
+  const { isWatched, toggle } = useWatchlist();
 
   const decodedSymbol = decodeURIComponent(symbol || "");
+  const watched = isWatched(decodedSymbol);
   const { quote, history, loading } = useChartData(
     decodedSymbol,
     RANGES[activeRange].range,
     RANGES[activeRange].interval
   );
+
+  const handleToggleWatchlist = async () => {
+    if (!user) { toast.error("Please sign in to use watchlist"); return; }
+    const added = await toggle(decodedSymbol);
+    toast.success(added ? "Added to watchlist ⭐" : "Removed from watchlist");
+  };
 
   const isUp = (quote?.change ?? 0) >= 0;
   const chartColor = isUp ? "hsl(var(--success))" : "hsl(var(--destructive))";
