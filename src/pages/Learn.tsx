@@ -151,11 +151,9 @@ const Learn = () => (
         <Play className="h-4 w-4 text-destructive" />
       </div>
       {youtubeVideos.map((v, i) => (
-        <motion.a
+        <motion.button
           key={v.url}
-          href={v.url}
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={() => window.open(v.url, "_blank", "noopener,noreferrer")}
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
@@ -175,7 +173,7 @@ const Learn = () => (
             <p className="mt-0.5 text-xs text-muted-foreground">{v.channel}</p>
           </div>
           <ExternalLink className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-        </motion.a>
+        </motion.button>
       ))}
     </div>
   </div>
