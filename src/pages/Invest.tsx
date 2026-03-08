@@ -262,9 +262,10 @@ const Invest = () => {
       active === "all" ||
       (active === "stocks" && q.type === "stock") ||
       (active === "etfs" && q.type === "etf");
+    const matchSector = sector === "all" || SYMBOL_SECTORS[q.symbol] === sector;
     const matchSearch = q.name.toLowerCase().includes(search.toLowerCase()) ||
       q.symbol.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
+    return matchCat && matchSector && matchSearch;
   });
 
   const filteredMF = mutualFunds.filter((f) =>
