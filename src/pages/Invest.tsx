@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Shield, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import { Search, Shield, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight, TrendingUp, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMarketData, type MarketQuote } from "@/hooks/useMarketData";
 import { useMutualFunds, type MutualFund } from "@/hooks/useMutualFunds";
+import { useWatchlist } from "@/hooks/useWatchlist";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const categoryKeys = ["all", "stocks", "etfs", "mutualFunds"] as const;
+const categoryKeys = ["all", "watchlist", "stocks", "etfs", "mutualFunds"] as const;
 
 const sectorKeys = ["all", "banking", "it", "pharma", "auto", "fmcg", "energy", "metals", "infra", "insurance", "etf"] as const;
 type Sector = typeof sectorKeys[number];
