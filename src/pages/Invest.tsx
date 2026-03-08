@@ -252,13 +252,18 @@ const Invest = () => {
   const { t } = useLanguage();
   const { data: quotes, loading: stocksLoading, refetch: refetchStocks } = useMarketData(ALL_SYMBOLS);
   const { data: mutualFunds, loading: mfLoading, refetch: refetchMF } = useMutualFunds();
+  const { symbols: watchlistSymbols, loading: wlLoading } = useWatchlist();
 
-  const catMap = { all: "All", stocks: "Stocks", etfs: "ETFs", mutualFunds: "Mutual Funds" };
-  const showStocks = active === "all" || active === "stocks" || active === "etfs";
+  const showStocks = active === "all" || active === "stocks" || active === "etfs" || active === "watchlist";
   const showMF = active === "all" || active === "mutualFunds";
 
   const filteredStocks = quotes.filter((q: MarketQuote) => {
     if (q.type === "index") return false;
+    if (active === "watchlist") {
+      const matchSearch = q.name.toLowerCase().includes(search.toLowerCase()) ||
+        q.symbol.toLowerCase().includes(search.toLowerCase());
+      return watchlistSymbols.includes(q.symbol) && matchSearch;
+    }
     const matchCat =
       active === "all" ||
       (active === "stocks" && q.type === "stock") ||
