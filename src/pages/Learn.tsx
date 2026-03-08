@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { BookOpen, TrendingUp, PieChart, Shield, Clock, ChevronRight, ExternalLink, Star, Globe } from "lucide-react";
 
 const topics = [
@@ -79,7 +80,9 @@ const topResources = [
   },
 ];
 
-const Learn = () => (
+const Learn = () => {
+  const navigate = useNavigate();
+  return (
   <div className="space-y-7 px-5 pb-4 pt-8">
     <div>
       <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Learn</h1>
@@ -101,7 +104,7 @@ const Learn = () => (
       <p className="mt-1.5 text-sm text-primary-foreground/50">
         A complete guide to start your investment journey with just ₹500.
       </p>
-      <button className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
+      <button onClick={() => navigate("/ai-advisor")} className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
         Start Learning <ChevronRight className="h-4 w-4" />
       </button>
     </motion.div>
@@ -170,6 +173,7 @@ const Learn = () => (
       ))}
     </div>
   </div>
-);
+  );
+};
 
 export default Learn;
