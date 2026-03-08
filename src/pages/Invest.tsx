@@ -215,6 +215,8 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
   const isAiPick = mfAiPicks.includes(fund.code);
   const bestReturn = fund.returns1Y ?? fund.returns3M ?? fund.returns1M ?? 0;
   const isUp = bestReturn >= 0;
+  const catStyle = MF_CATEGORY_ICONS[fund.category] || DEFAULT_ICON;
+  const CatIcon = catStyle.icon;
 
   return (
     <motion.div
@@ -224,19 +226,22 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
       onClick={() => navigate(`/mutual-fund/${fund.code}`)}
       className="cursor-pointer rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-card-hover active:scale-[0.99]"
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1 space-y-1">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-foreground">{fund.name}</h4>
-            {isAiPick && <Sparkles className="h-3 w-3 text-accent" />}
+      <div className="flex items-start gap-3">
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${catStyle.bg}`}>
+          <CatIcon className={`h-5 w-5 ${catStyle.fg}`} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <h4 className="text-sm font-semibold text-foreground truncate">{fund.name}</h4>
+            {isAiPick && <Sparkles className="h-3 w-3 shrink-0 text-accent" />}
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground mt-0.5">
             <span>{fund.category}</span>
             <span className="text-border">•</span>
             <span>{fund.amc}</span>
           </div>
         </div>
-        <div className="text-right">
+        <div className="text-right shrink-0">
           <p className="font-display text-sm font-bold text-foreground">₹{fund.nav.toFixed(2)}</p>
           <p className="text-[10px] text-muted-foreground">NAV</p>
         </div>
