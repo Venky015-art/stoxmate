@@ -323,7 +323,7 @@ const Invest = () => {
         ))}
       </div>
 
-      {showStocks && (
+      {showStocks && active !== "watchlist" && (
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {sectorKeys.map((s) => (
             <button
@@ -341,7 +341,15 @@ const Invest = () => {
         </div>
       )}
 
-      {showStocks && (
+      {active === "watchlist" && !wlLoading && filteredStocks.length === 0 && (
+        <div className="flex flex-col items-center gap-2 py-16">
+          <Star className="h-8 w-8 text-muted-foreground/30" />
+          <p className="text-sm text-muted-foreground">{t("noResults")}</p>
+          <p className="text-xs text-muted-foreground/60">Star stocks from detail pages to add them here</p>
+        </div>
+      )}
+
+      {showStocks && (active !== "watchlist" || filteredStocks.length > 0) && (
         <div className="space-y-2.5">
           {stocksLoading && quotes.length === 0
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`s-${i}`} />)
