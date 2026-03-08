@@ -302,12 +302,12 @@ const Invest = () => {
       )}
 
       {!loading && filteredStocks.length === 0 && filteredMF.length === 0 && (
-        <p className="py-12 text-center text-sm text-muted-foreground">No results found</p>
+        <p className="py-12 text-center text-sm text-muted-foreground">{t("noResults")}</p>
       )}
 
       {(quotes.length > 0 || mutualFunds.length > 0) && (
         <p className="text-center text-[10px] text-muted-foreground/50 pb-2">
-          Data may be delayed up to 15 minutes
+          {t("dataDelayed")}
         </p>
       )}
     </div>
