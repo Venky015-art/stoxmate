@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Shield, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import {
+  Search, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight, TrendingUp,
+  Landmark, Cpu, Pill, Car, Zap, Factory, Flame, Building2, ShoppingBag,
+  Gem, Droplets, Shield, HeartPulse, BarChart3, Coins, CircleDollarSign,
+  Layers, PiggyBank, LineChart
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMarketData, type MarketQuote } from "@/hooks/useMarketData";
 import { useMutualFunds, type MutualFund } from "@/hooks/useMutualFunds";
@@ -10,6 +15,72 @@ import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const categoryKeys = ["all", "stocks", "etfs", "mutualFunds"] as const;
+
+const SECTOR_ICONS: Record<string, { icon: typeof Landmark; bg: string; fg: string }> = {
+  "HDFCBANK.NS": { icon: Landmark, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "ICICIBANK.NS": { icon: Landmark, bg: "bg-orange-500/15", fg: "text-orange-500" },
+  "SBIN.NS": { icon: Landmark, bg: "bg-blue-600/15", fg: "text-blue-600" },
+  "KOTAKBANK.NS": { icon: Landmark, bg: "bg-red-500/15", fg: "text-red-500" },
+  "AXISBANK.NS": { icon: Landmark, bg: "bg-purple-500/15", fg: "text-purple-500" },
+  "BAJFINANCE.NS": { icon: CircleDollarSign, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "BAJAJFINSV.NS": { icon: CircleDollarSign, bg: "bg-blue-400/15", fg: "text-blue-400" },
+  "INDUSINDBK.NS": { icon: Landmark, bg: "bg-teal-500/15", fg: "text-teal-500" },
+  "SBILIFE.NS": { icon: Shield, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "HDFCLIFE.NS": { icon: Shield, bg: "bg-red-500/15", fg: "text-red-500" },
+  "TCS.NS": { icon: Cpu, bg: "bg-indigo-500/15", fg: "text-indigo-500" },
+  "INFY.NS": { icon: Cpu, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "WIPRO.NS": { icon: Cpu, bg: "bg-violet-500/15", fg: "text-violet-500" },
+  "TECHM.NS": { icon: Cpu, bg: "bg-cyan-500/15", fg: "text-cyan-500" },
+  "HCLTECH.NS": { icon: Cpu, bg: "bg-sky-500/15", fg: "text-sky-500" },
+  "SUNPHARMA.NS": { icon: Pill, bg: "bg-green-500/15", fg: "text-green-500" },
+  "DRREDDY.NS": { icon: Pill, bg: "bg-emerald-500/15", fg: "text-emerald-500" },
+  "CIPLA.NS": { icon: Pill, bg: "bg-teal-500/15", fg: "text-teal-500" },
+  "DIVISLAB.NS": { icon: Pill, bg: "bg-lime-600/15", fg: "text-lime-600" },
+  "APOLLOHOSP.NS": { icon: HeartPulse, bg: "bg-red-500/15", fg: "text-red-500" },
+  "TATAMOTORS.NS": { icon: Car, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "MARUTI.NS": { icon: Car, bg: "bg-red-500/15", fg: "text-red-500" },
+  "EICHERMOT.NS": { icon: Car, bg: "bg-orange-500/15", fg: "text-orange-500" },
+  "HEROMOTOCO.NS": { icon: Car, bg: "bg-rose-500/15", fg: "text-rose-500" },
+  "M&M.NS": { icon: Car, bg: "bg-red-600/15", fg: "text-red-600" },
+  "RELIANCE.NS": { icon: Flame, bg: "bg-amber-500/15", fg: "text-amber-500" },
+  "BHARTIARTL.NS": { icon: Zap, bg: "bg-red-500/15", fg: "text-red-500" },
+  "POWERGRID.NS": { icon: Zap, bg: "bg-yellow-600/15", fg: "text-yellow-600" },
+  "NTPC.NS": { icon: Zap, bg: "bg-green-600/15", fg: "text-green-600" },
+  "ONGC.NS": { icon: Droplets, bg: "bg-blue-600/15", fg: "text-blue-600" },
+  "BPCL.NS": { icon: Droplets, bg: "bg-yellow-500/15", fg: "text-yellow-500" },
+  "COALINDIA.NS": { icon: Factory, bg: "bg-stone-500/15", fg: "text-stone-500" },
+  "LT.NS": { icon: Building2, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "ULTRACEMCO.NS": { icon: Building2, bg: "bg-gray-500/15", fg: "text-gray-500" },
+  "GRASIM.NS": { icon: Factory, bg: "bg-amber-600/15", fg: "text-amber-600" },
+  "JSWSTEEL.NS": { icon: Factory, bg: "bg-slate-500/15", fg: "text-slate-500" },
+  "TATASTEEL.NS": { icon: Factory, bg: "bg-blue-600/15", fg: "text-blue-600" },
+  "HINDALCO.NS": { icon: Factory, bg: "bg-orange-600/15", fg: "text-orange-600" },
+  "ADANIENT.NS": { icon: Building2, bg: "bg-blue-700/15", fg: "text-blue-700" },
+  "ADANIPORTS.NS": { icon: Building2, bg: "bg-sky-600/15", fg: "text-sky-600" },
+  "ITC.NS": { icon: ShoppingBag, bg: "bg-green-500/15", fg: "text-green-500" },
+  "HINDUNILVR.NS": { icon: ShoppingBag, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "NESTLEIND.NS": { icon: ShoppingBag, bg: "bg-red-500/15", fg: "text-red-500" },
+  "TITAN.NS": { icon: Gem, bg: "bg-amber-500/15", fg: "text-amber-500" },
+  "BRITANNIA.NS": { icon: ShoppingBag, bg: "bg-orange-500/15", fg: "text-orange-500" },
+  "ASIANPAINT.NS": { icon: ShoppingBag, bg: "bg-cyan-500/15", fg: "text-cyan-500" },
+  "TATACONSUM.NS": { icon: ShoppingBag, bg: "bg-teal-500/15", fg: "text-teal-500" },
+  "NIFTYBEES.NS": { icon: BarChart3, bg: "bg-primary/15", fg: "text-primary" },
+  "BANKBEES.NS": { icon: Landmark, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "GOLDBEES.NS": { icon: Coins, bg: "bg-yellow-500/15", fg: "text-yellow-500" },
+  "ITBEES.NS": { icon: Cpu, bg: "bg-indigo-500/15", fg: "text-indigo-500" },
+  "JUNIORBEES.NS": { icon: BarChart3, bg: "bg-green-500/15", fg: "text-green-500" },
+};
+
+const DEFAULT_ICON = { icon: BarChart3, bg: "bg-muted", fg: "text-muted-foreground" };
+
+const MF_CATEGORY_ICONS: Record<string, { icon: typeof Landmark; bg: string; fg: string }> = {
+  "Large Cap": { icon: Layers, bg: "bg-blue-500/15", fg: "text-blue-500" },
+  "Mid Cap": { icon: TrendingUp, bg: "bg-purple-500/15", fg: "text-purple-500" },
+  "Small Cap": { icon: LineChart, bg: "bg-orange-500/15", fg: "text-orange-500" },
+  "Flexi Cap": { icon: BarChart3, bg: "bg-emerald-500/15", fg: "text-emerald-500" },
+  "Index": { icon: Layers, bg: "bg-indigo-500/15", fg: "text-indigo-500" },
+  "Hybrid": { icon: PiggyBank, bg: "bg-teal-500/15", fg: "text-teal-500" },
+};
 
 const riskLevel = (symbol: string): string => {
   if (symbol.includes("GOLDBEES") || symbol.includes("NIFTYBEES")) return "Low";
@@ -77,6 +148,8 @@ const StockCard = ({
   const isAiPick = aiPicks.includes(q.symbol);
   const isUp = q.change >= 0;
   const data = sparkline(q.price, q.change);
+  const sectorStyle = SECTOR_ICONS[q.symbol] || DEFAULT_ICON;
+  const SectorIcon = sectorStyle.icon;
 
   return (
     <motion.div
@@ -87,22 +160,27 @@ const StockCard = ({
       onClick={() => navigate(`/stock/${encodeURIComponent(q.symbol)}`)}
       className="cursor-pointer rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-card-hover active:scale-[0.99]"
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1 space-y-1">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-foreground">{q.name}</h4>
-            {isAiPick && <Sparkles className="h-3 w-3 text-accent" />}
+      <div className="flex items-start gap-3">
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${sectorStyle.bg}`}>
+          <SectorIcon className={`h-5 w-5 ${sectorStyle.fg}`} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <h4 className="text-sm font-semibold text-foreground truncate">{q.name}</h4>
+              {isAiPick && <Sparkles className="h-3 w-3 shrink-0 text-accent" />}
+            </div>
+            <span className={`font-display text-sm font-bold shrink-0 ml-2 ${isUp ? "text-success" : "text-destructive"}`}>
+              <span className="flex items-center gap-0.5">
+                {isUp ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                {isUp ? "+" : ""}{q.changePercent.toFixed(2)}%
+              </span>
+            </span>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground mt-0.5">
             ₹{q.price.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
           </p>
         </div>
-        <span className={`font-display text-sm font-bold ${isUp ? "text-success" : "text-destructive"}`}>
-          <span className="flex items-center gap-0.5">
-            {isUp ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-            {isUp ? "+" : ""}{q.changePercent.toFixed(2)}%
-          </span>
-        </span>
       </div>
       <div className="mt-3 flex items-end justify-between">
         <div className="flex items-center gap-1.5">
@@ -137,6 +215,8 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
   const isAiPick = mfAiPicks.includes(fund.code);
   const bestReturn = fund.returns1Y ?? fund.returns3M ?? fund.returns1M ?? 0;
   const isUp = bestReturn >= 0;
+  const catStyle = MF_CATEGORY_ICONS[fund.category] || DEFAULT_ICON;
+  const CatIcon = catStyle.icon;
 
   return (
     <motion.div
@@ -146,19 +226,22 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
       onClick={() => navigate(`/mutual-fund/${fund.code}`)}
       className="cursor-pointer rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-card-hover active:scale-[0.99]"
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1 space-y-1">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-foreground">{fund.name}</h4>
-            {isAiPick && <Sparkles className="h-3 w-3 text-accent" />}
+      <div className="flex items-start gap-3">
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${catStyle.bg}`}>
+          <CatIcon className={`h-5 w-5 ${catStyle.fg}`} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <h4 className="text-sm font-semibold text-foreground truncate">{fund.name}</h4>
+            {isAiPick && <Sparkles className="h-3 w-3 shrink-0 text-accent" />}
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground mt-0.5">
             <span>{fund.category}</span>
             <span className="text-border">•</span>
             <span>{fund.amc}</span>
           </div>
         </div>
-        <div className="text-right">
+        <div className="text-right shrink-0">
           <p className="font-display text-sm font-bold text-foreground">₹{fund.nav.toFixed(2)}</p>
           <p className="text-[10px] text-muted-foreground">NAV</p>
         </div>
