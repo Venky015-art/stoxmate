@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, PieChart, Shield, Clock, ChevronRight, Play, ExternalLink } from "lucide-react";
+import { BookOpen, TrendingUp, PieChart, Shield, Clock, ChevronRight, ExternalLink, Star, Globe } from "lucide-react";
 
 const topics = [
   {
@@ -34,48 +34,48 @@ const topics = [
   },
 ];
 
-const youtubeVideos = [
+const topResources = [
   {
-    title: "Stock Market for Beginners",
-    channel: "CA Rachana Ranade",
-    url: "https://www.youtube.com/watch?v=_yGOcOKF6gA",
-    thumbnail: "https://img.youtube.com/vi/_yGOcOKF6gA/mqdefault.jpg",
-    duration: "22 min",
+    title: "Investopedia",
+    desc: "World's leading financial education website",
+    url: "https://www.investopedia.com",
+    rating: "4.9",
+    tag: "Best Overall",
   },
   {
-    title: "Mutual Funds Explained",
-    channel: "Warikoo",
-    url: "https://www.youtube.com/watch?v=UyXGwCRpWOQ",
-    thumbnail: "https://img.youtube.com/vi/UyXGwCRpWOQ/mqdefault.jpg",
-    duration: "18 min",
+    title: "Varsity by Zerodha",
+    desc: "Free comprehensive stock market courses for Indians",
+    url: "https://zerodha.com/varsity",
+    rating: "4.8",
+    tag: "Top Rated",
   },
   {
-    title: "How to Invest in Share Market",
-    channel: "Pranjal Kamra",
-    url: "https://www.youtube.com/watch?v=vP8lRBXEjYQ",
-    thumbnail: "https://img.youtube.com/vi/vP8lRBXEjYQ/mqdefault.jpg",
-    duration: "15 min",
+    title: "Moneycontrol",
+    desc: "India's #1 financial platform for news & analysis",
+    url: "https://www.moneycontrol.com",
+    rating: "4.7",
+    tag: "Popular",
   },
   {
-    title: "SIP Investment Complete Guide",
-    channel: "Labour Law Advisor",
-    url: "https://www.youtube.com/watch?v=MaUyx85MxSk",
-    thumbnail: "https://img.youtube.com/vi/MaUyx85MxSk/mqdefault.jpg",
-    duration: "20 min",
+    title: "ET Money Learn",
+    desc: "Simplified guides on mutual funds & investing",
+    url: "https://www.etmoney.com/learn",
+    rating: "4.6",
+    tag: "Beginner Friendly",
   },
   {
-    title: "Basics of Stock Market for Beginners",
-    channel: "Pushkar Raj Thakur",
-    url: "https://www.youtube.com/watch?v=5JQFSx6nmso",
-    thumbnail: "https://img.youtube.com/vi/5JQFSx6nmso/mqdefault.jpg",
-    duration: "25 min",
+    title: "Groww Learn",
+    desc: "Easy-to-understand articles on stocks & MFs",
+    url: "https://groww.in/blog",
+    rating: "4.5",
+    tag: "Trending",
   },
   {
-    title: "Index Funds vs Mutual Funds",
-    channel: "Akshat Shrivastava",
-    url: "https://www.youtube.com/watch?v=jzkaEY_e0xg",
-    thumbnail: "https://img.youtube.com/vi/jzkaEY_e0xg/mqdefault.jpg",
-    duration: "17 min",
+    title: "Value Research",
+    desc: "India's best mutual fund research & ratings",
+    url: "https://www.valueresearchonline.com",
+    rating: "4.7",
+    tag: "Expert Pick",
   },
 ];
 
@@ -134,33 +134,36 @@ const Learn = () => (
       })}
     </div>
 
-    {/* YouTube Videos */}
+    {/* Top Resources */}
     <div className="space-y-2.5">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-sm font-semibold tracking-tight text-foreground">Top YouTube Videos</h2>
-        <Play className="h-3.5 w-3.5 text-destructive" />
+        <h2 className="font-display text-sm font-semibold tracking-tight text-foreground">Top Rated Resources</h2>
+        <Globe className="h-3.5 w-3.5 text-accent" />
       </div>
-      {youtubeVideos.map((v, i) => (
+      {topResources.map((r, i) => (
         <motion.button
-          key={v.url}
-          onClick={() => window.open(v.url, "_blank", "noopener,noreferrer")}
+          key={r.url}
+          onClick={() => window.open(r.url, "_blank", "noopener,noreferrer")}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.04 }}
-          className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left transition-all hover:shadow-card-hover active:scale-[0.99]"
+          className="flex w-full items-center gap-3.5 rounded-2xl border border-border bg-card p-4 text-left transition-all hover:shadow-card-hover active:scale-[0.99]"
         >
-          <div className="relative h-14 w-22 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
-            <img src={v.thumbnail} alt={v.title} className="h-full w-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-              <Play className="h-4 w-4 fill-white text-white" />
-            </div>
-            <span className="absolute bottom-1 right-1 rounded bg-black/60 px-1 py-0.5 text-[9px] font-medium text-white">
-              {v.duration}
-            </span>
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-secondary">
+            <Globe className="h-4 w-4 text-foreground" />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug">{v.title}</h4>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">{v.channel}</p>
+            <div className="flex items-center gap-2">
+              <h4 className="text-sm font-semibold text-foreground">{r.title}</h4>
+              <span className="rounded-full bg-secondary px-2 py-0.5 text-[9px] font-semibold text-muted-foreground">
+                {r.tag}
+              </span>
+            </div>
+            <p className="mt-0.5 text-[11px] text-muted-foreground line-clamp-1">{r.desc}</p>
+            <div className="mt-1 flex items-center gap-1">
+              <Star className="h-3 w-3 fill-warning text-warning" />
+              <span className="text-[10px] font-semibold text-foreground">{r.rating}</span>
+            </div>
           </div>
           <ExternalLink className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground/40" />
         </motion.button>
