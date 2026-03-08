@@ -143,6 +143,41 @@ const Learn = () => (
         );
       })}
     </div>
+
+    {/* YouTube Videos */}
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="font-display text-base font-bold text-foreground">Top YouTube Videos</h2>
+        <Play className="h-4 w-4 text-destructive" />
+      </div>
+      {youtubeVideos.map((v, i) => (
+        <motion.a
+          key={v.url}
+          href={v.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.05 }}
+          className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-card transition-shadow hover:shadow-card-hover"
+        >
+          <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
+            <img src={v.thumbnail} alt={v.title} className="h-full w-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+              <Play className="h-5 w-5 fill-white text-white" />
+            </div>
+            <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 py-0.5 text-[9px] font-medium text-white">
+              {v.duration}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-semibold text-foreground line-clamp-2">{v.title}</h4>
+            <p className="mt-0.5 text-xs text-muted-foreground">{v.channel}</p>
+          </div>
+          <ExternalLink className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+        </motion.a>
+      ))}
+    </div>
   </div>
 );
 
