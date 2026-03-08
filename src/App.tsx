@@ -38,6 +38,7 @@ const App = () => (
             <Route path="/financial-setup" element={<FinancialSetup />} />
             <Route path="/ai-advisor" element={<AIAdvisor />} />
             <Route path="/stock/:symbol" element={<StockDetail />} />
+            <Route path="/mutual-fund/:code" element={<MutualFundDetail />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route element={<AppLayout />}>
               <Route path="/home" element={<Home />} />
