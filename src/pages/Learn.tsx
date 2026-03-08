@@ -104,7 +104,7 @@ const Learn = () => {
       <p className="mt-1.5 text-sm text-primary-foreground/50">
         A complete guide to start your investment journey with just ₹500.
       </p>
-      <button onClick={() => navigate("/ai-advisor")} className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
+      <button onClick={() => navigate(`/ai-advisor?q=${encodeURIComponent("Guide me on investing for beginners with just ₹500")}`)} className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
         Start Learning <ChevronRight className="h-4 w-4" />
       </button>
     </motion.div>
@@ -119,7 +119,7 @@ const Learn = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
-            onClick={() => navigate("/ai-advisor")}
+            onClick={() => navigate(`/ai-advisor?q=${encodeURIComponent("Explain " + t.title + ": " + t.desc)}`)}
             className="flex w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left transition-all hover:shadow-card-hover active:scale-[0.99]"
           >
             <div className="rounded-xl bg-secondary p-2.5">

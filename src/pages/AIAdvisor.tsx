@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, Sparkles, Bot, User, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 interface Message {
@@ -99,6 +99,7 @@ async function streamChat({
 
 const AIAdvisor = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -108,10 +109,19 @@ const AIAdvisor = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const autoSentRef = useRef(false);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q && !autoSentRef.current) {
+      autoSentRef.current = true;
+      sendMessage(q);
+    }
+  }, [searchParams]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isTyping) return;
