@@ -43,7 +43,14 @@ const Home = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Good morning</p>
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            {(() => {
+              const h = new Date().getHours();
+              if (h < 12) return "Good morning ☀️";
+              if (h < 17) return "Good afternoon 🌤️";
+              return "Good evening 🌙";
+            })()}
+          </p>
           <h1 className="font-display text-xl font-bold tracking-tight text-foreground mt-0.5">Investor</h1>
         </div>
         <button
