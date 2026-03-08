@@ -53,6 +53,7 @@ const Invest = () => {
       q.symbol.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-5 px-5 pb-4 pt-6">
