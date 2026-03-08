@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Search, Shield, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -52,6 +53,7 @@ const Invest = () => {
       q.symbol.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-5 px-5 pb-4 pt-6">
@@ -118,7 +120,8 @@ const Invest = () => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.03 }}
-                  className="rounded-2xl border border-border bg-card p-4 shadow-card"
+                  onClick={() => navigate(`/stock/${encodeURIComponent(q.symbol)}`)}
+                  className="cursor-pointer rounded-2xl border border-border bg-card p-4 shadow-card transition-shadow hover:shadow-card-hover"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-1">
