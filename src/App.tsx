@@ -12,6 +12,7 @@ import FinancialSetup from "./pages/FinancialSetup";
 import Home from "./pages/Home";
 import Invest from "./pages/Invest";
 import AIAdvisor from "./pages/AIAdvisor";
+import StockDetail from "./pages/StockDetail";
 import Portfolio from "./pages/Portfolio";
 import Learn from "./pages/Learn";
 import Notifications from "./pages/Notifications";
