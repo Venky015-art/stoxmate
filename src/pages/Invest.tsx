@@ -201,21 +201,23 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
 };
 
 const Invest = () => {
-  const [active, setActive] = useState("All");
+  const [active, setActive] = useState<typeof categoryKeys[number]>("all");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { data: quotes, loading: stocksLoading, refetch: refetchStocks } = useMarketData(ALL_SYMBOLS);
   const { data: mutualFunds, loading: mfLoading, refetch: refetchMF } = useMutualFunds();
 
-  const showStocks = active === "All" || active === "Stocks" || active === "ETFs";
-  const showMF = active === "All" || active === "Mutual Funds";
+  const catMap = { all: "All", stocks: "Stocks", etfs: "ETFs", mutualFunds: "Mutual Funds" };
+  const showStocks = active === "all" || active === "stocks" || active === "etfs";
+  const showMF = active === "all" || active === "mutualFunds";
 
   const filteredStocks = quotes.filter((q: MarketQuote) => {
     if (q.type === "index") return false;
     const matchCat =
-      active === "All" ||
-      (active === "Stocks" && q.type === "stock") ||
-      (active === "ETFs" && q.type === "etf");
+      active === "all" ||
+      (active === "stocks" && q.type === "stock") ||
+      (active === "etfs" && q.type === "etf");
     const matchSearch = q.name.toLowerCase().includes(search.toLowerCase()) ||
       q.symbol.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
@@ -238,8 +240,8 @@ const Invest = () => {
     <div className="space-y-5 px-5 pb-4 pt-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Invest</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">Live market data</p>
+          <h1 className="font-display text-xl font-bold tracking-tight text-foreground">{t("invest")}</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">{t("liveMarketData")}</p>
         </div>
         <button onClick={handleRefresh} className="rounded-xl bg-secondary p-2 hover:bg-secondary/80 transition-colors" disabled={loading}>
           <RefreshCw className={`h-4 w-4 text-muted-foreground ${loading ? "animate-spin" : ""}`} />
@@ -249,7 +251,7 @@ const Invest = () => {
       <div className="relative">
         <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
         <Input
-          placeholder="Search stocks, ETFs, mutual funds..."
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="h-11 rounded-xl border-border bg-secondary/50 pl-11 text-sm placeholder:text-muted-foreground/40"
@@ -257,7 +259,7 @@ const Invest = () => {
       </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1">
-        {categories.map((c) => (
+        {categoryKeys.map((c) => (
           <button
             key={c}
             onClick={() => setActive(c)}
@@ -265,7 +267,7 @@ const Invest = () => {
               active === c ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
-            {c}
+            {t(c)}
           </button>
         ))}
       </div>
