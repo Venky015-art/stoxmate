@@ -4,15 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { useMarketData, type MarketQuote } from "@/hooks/useMarketData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const chartData = [
   { v: 24 }, { v: 28 }, { v: 26 }, { v: 32 }, { v: 30 }, { v: 38 }, { v: 35 }, { v: 42 }, { v: 40 }, { v: 48 }, { v: 45 }, { v: 52 },
-];
-
-const suggestions = [
-  { title: "Start a SIP in Nifty 50 Index Fund", desc: "Low risk • ₹500/month", tag: "Recommended" },
-  { title: "Diversify with a Flexi-Cap Fund", desc: "Medium risk • High growth", tag: "AI Pick" },
-  { title: "Add Gold ETF to your portfolio", desc: "Hedge against inflation", tag: "New" },
 ];
 
 const formatPrice = (price: number) => {
@@ -36,45 +31,43 @@ const MarketCard = ({ quote }: { quote: MarketQuote }) => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { data: marketData, loading, refetch } = useMarketData(["^NSEI", "^BSESN", "^NSEBANK"]);
+
+  const greeting = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return t("goodMorning");
+    if (h < 17) return t("goodAfternoon");
+    return t("goodEvening");
+  })();
+
+  const suggestions = [
+    { title: t("sipSuggestion"), desc: t("sipDesc"), tag: t("recommended") },
+    { title: t("diversifySuggestion"), desc: t("diversifyDesc"), tag: t("aiPick") },
+    { title: t("goldSuggestion"), desc: t("goldDesc"), tag: t("new") },
+  ];
 
   return (
     <div className="space-y-7 px-5 pb-4 pt-8">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            {(() => {
-              const h = new Date().getHours();
-              if (h < 12) return "Good morning ☀️";
-              if (h < 17) return "Good afternoon 🌤️";
-              return "Good evening 🌙";
-            })()}
-          </p>
-          <h1 className="font-display text-xl font-bold tracking-tight text-foreground mt-0.5">Investor</h1>
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{greeting}</p>
+          <h1 className="font-display text-xl font-bold tracking-tight text-foreground mt-0.5">{t("investor")}</h1>
         </div>
-        <button
-          onClick={() => navigate("/notifications")}
-          className="relative rounded-xl bg-secondary p-2.5 hover:bg-secondary/80 transition-colors"
-        >
+        <button onClick={() => navigate("/notifications")} className="relative rounded-xl bg-secondary p-2.5 hover:bg-secondary/80 transition-colors">
           <Bell className="h-[18px] w-[18px] text-foreground" />
           <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-accent" />
         </button>
       </div>
 
-      {/* Portfolio Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="gradient-primary overflow-hidden rounded-2xl p-6"
-      >
-        <p className="text-xs font-medium uppercase tracking-wider text-primary-foreground/50">Total Portfolio</p>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="gradient-primary overflow-hidden rounded-2xl p-6">
+        <p className="text-xs font-medium uppercase tracking-wider text-primary-foreground/50">{t("totalPortfolio")}</p>
         <h2 className="font-display text-3xl font-bold text-primary-foreground mt-1.5">₹1,24,850</h2>
         <div className="mt-1.5 flex items-center gap-1.5">
           <span className="flex items-center gap-0.5 rounded-full bg-accent/20 px-2 py-0.5 text-xs font-semibold text-accent">
             <ArrowUpRight className="h-3 w-3" /> 12.4%
           </span>
-          <span className="text-xs text-primary-foreground/40">all time</span>
+          <span className="text-xs text-primary-foreground/40">{t("allTime")}</span>
         </div>
         <div className="mt-4 h-14">
           <ResponsiveContainer width="100%" height="100%">
@@ -91,10 +84,9 @@ const Home = () => {
         </div>
       </motion.div>
 
-      {/* Market Summary */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-display text-sm font-semibold tracking-tight text-foreground">Today's Market</h3>
+          <h3 className="font-display text-sm font-semibold tracking-tight text-foreground">{t("todaysMarket")}</h3>
           <button onClick={refetch} className="rounded-lg p-1.5 hover:bg-secondary transition-colors" disabled={loading}>
             <RefreshCw className={`h-3.5 w-3.5 text-muted-foreground ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -110,43 +102,31 @@ const Home = () => {
               ))
             : marketData.map((q) => <MarketCard key={q.symbol} quote={q} />)}
         </div>
-        {marketData.length > 0 && (
-          <p className="mt-2 text-[10px] text-muted-foreground/60">
-            Live • Auto-refreshes every minute
-          </p>
-        )}
+        {marketData.length > 0 && <p className="mt-2 text-[10px] text-muted-foreground/60">{t("liveRefresh")}</p>}
       </motion.div>
 
-      {/* AI Suggestions */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <div className="mb-3 flex items-center gap-2">
           <Sparkles className="h-3.5 w-3.5 text-accent" />
-          <h3 className="font-display text-sm font-semibold tracking-tight text-foreground">Smart Suggestions</h3>
+          <h3 className="font-display text-sm font-semibold tracking-tight text-foreground">{t("smartSuggestions")}</h3>
         </div>
         <div className="space-y-2.5">
           {suggestions.map((s) => (
-            <button
-              key={s.title}
-              onClick={() => navigate("/ai-advisor")}
-              className="w-full rounded-2xl border border-border bg-card p-4 text-left transition-all hover:shadow-card-hover"
-            >
+            <button key={s.title} onClick={() => navigate("/ai-advisor")} className="w-full rounded-2xl border border-border bg-card p-4 text-left transition-all hover:shadow-card-hover">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 space-y-1">
                   <h4 className="text-sm font-semibold text-foreground leading-snug">{s.title}</h4>
                   <p className="text-[11px] text-muted-foreground">{s.desc}</p>
                 </div>
-                <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-[10px] font-semibold text-foreground">
-                  {s.tag}
-                </span>
+                <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-[10px] font-semibold text-foreground">{s.tag}</span>
               </div>
             </button>
           ))}
         </div>
       </motion.div>
 
-      {/* Goal Progress */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-        <h3 className="mb-3 font-display text-sm font-semibold tracking-tight text-foreground">Goal Progress</h3>
+        <h3 className="mb-3 font-display text-sm font-semibold tracking-tight text-foreground">{t("goalProgress")}</h3>
         <div className="rounded-2xl border border-border bg-card p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -154,7 +134,7 @@ const Home = () => {
                 <TrendingUp className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-foreground">Emergency Fund</h4>
+                <h4 className="text-sm font-semibold text-foreground">{t("emergencyFund")}</h4>
                 <p className="text-[11px] text-muted-foreground">₹1.24L of ₹3L</p>
               </div>
             </div>

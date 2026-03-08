@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { TrendingUp } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Splash = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => navigate("/onboarding"), 2500);
@@ -37,14 +39,9 @@ const Splash = () => {
         transition={{ delay: 0.7 }}
         className="mt-4 text-center text-sm text-muted-foreground"
       >
-        Investing made simple
+        {t("investingSimple")}
       </motion.p>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
-        transition={{ delay: 1 }}
-        className="mt-16"
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.4 }} transition={{ delay: 1 }} className="mt-16">
         <div className="h-0.5 w-12 animate-pulse-soft rounded-full bg-foreground/20" />
       </motion.div>
     </div>
