@@ -164,7 +164,7 @@ serve(async (req) => {
   } catch (e) {
     console.error("market-data error:", e);
     return new Response(
-      JSON.stringify({ success: false, error: e instanceof Error ? e.message : "Unknown error" }),
+      JSON.stringify({ success: false, error: "An unexpected error occurred. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
