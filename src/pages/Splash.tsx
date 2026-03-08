@@ -14,19 +14,19 @@ const Splash = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6">
       <motion.div
-        initial={{ scale: 0.5, opacity: 0 }}
+        initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className="flex flex-col items-center gap-4"
+        transition={{ type: "spring", stiffness: 180, damping: 22 }}
+        className="flex flex-col items-center gap-5"
       >
-        <div className="gradient-primary flex h-20 w-20 items-center justify-center rounded-2xl shadow-card">
-          <TrendingUp className="h-10 w-10 text-primary-foreground" strokeWidth={2.5} />
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-foreground">
+          <TrendingUp className="h-8 w-8 text-background" strokeWidth={2} />
         </div>
         <motion.h1
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="font-display text-3xl font-bold text-foreground"
+          transition={{ delay: 0.3 }}
+          className="font-display text-2xl font-bold tracking-tight text-foreground"
         >
           StoxMate
         </motion.h1>
@@ -34,18 +34,18 @@ const Splash = () => {
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="mt-6 text-center text-sm text-muted-foreground"
+        transition={{ delay: 0.7 }}
+        className="mt-4 text-center text-sm text-muted-foreground"
       >
-        Finance for everyone, not just experts
+        Investing made simple
       </motion.p>
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ delay: 1.2 }}
-        className="mt-12"
+        animate={{ opacity: 0.4 }}
+        transition={{ delay: 1 }}
+        className="mt-16"
       >
-        <div className="h-1 w-16 animate-pulse-soft rounded-full bg-primary/30" />
+        <div className="h-0.5 w-12 animate-pulse-soft rounded-full bg-foreground/20" />
       </motion.div>
     </div>
   );

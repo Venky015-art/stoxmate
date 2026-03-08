@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { PieChart, Pie, Cell, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from "recharts";
 
 const allocation = [
-  { name: "Index Funds", value: 45, color: "hsl(221, 83%, 53%)" },
-  { name: "Flexi-Cap", value: 25, color: "hsl(174, 72%, 40%)" },
-  { name: "Gold ETF", value: 15, color: "hsl(38, 92%, 50%)" },
-  { name: "Debt Funds", value: 15, color: "hsl(215, 16%, 47%)" },
+  { name: "Index Funds", value: 45, color: "hsl(240, 5%, 12%)" },
+  { name: "Flexi-Cap", value: 25, color: "hsl(158, 64%, 52%)" },
+  { name: "Gold ETF", value: 15, color: "hsl(36, 100%, 57%)" },
+  { name: "Debt Funds", value: 15, color: "hsl(240, 4%, 70%)" },
 ];
 
 const growthData = [
@@ -31,40 +31,40 @@ const holdings = [
 ];
 
 const Portfolio = () => (
-  <div className="space-y-6 px-5 pb-4 pt-6">
+  <div className="space-y-7 px-5 pb-4 pt-8">
     <div>
-      <h1 className="font-display text-xl font-bold text-foreground">Portfolio</h1>
-      <p className="text-sm text-muted-foreground">Your investment overview</p>
+      <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Portfolio</h1>
+      <p className="text-xs text-muted-foreground mt-0.5">Your investment overview</p>
     </div>
 
     {/* Value Card */}
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-border bg-card p-5 shadow-card"
+      className="rounded-2xl border border-border bg-card p-5"
     >
-      <p className="text-sm text-muted-foreground">Total Value</p>
-      <h2 className="font-display text-3xl font-bold text-foreground">₹1,24,850</h2>
-      <div className="flex items-center gap-3 text-sm">
-        <span className="font-medium text-success">+₹13,850 (12.4%)</span>
-        <span className="text-muted-foreground">invested ₹1,11,000</span>
+      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Value</p>
+      <h2 className="font-display text-3xl font-bold text-foreground mt-1">₹1,24,850</h2>
+      <div className="flex items-center gap-3 text-sm mt-1">
+        <span className="font-semibold text-success">+₹13,850 (12.4%)</span>
+        <span className="text-xs text-muted-foreground">invested ₹1,11,000</span>
       </div>
     </motion.div>
 
     {/* Growth Chart */}
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-      <h3 className="mb-3 font-display text-base font-semibold text-foreground">Growth</h3>
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
-        <div className="h-48">
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+      <h3 className="mb-3 font-display text-sm font-semibold tracking-tight text-foreground">Growth</h3>
+      <div className="rounded-2xl border border-border bg-card p-4">
+        <div className="h-44">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={growthData}>
               <defs>
                 <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="hsl(221, 83%, 53%)" stopOpacity={0} />
+                  <stop offset="0%" stopColor="hsl(var(--foreground))" stopOpacity={0.08} />
+                  <stop offset="100%" stopColor="hsl(var(--foreground))" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" tickLine={false} axisLine={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} />
               <YAxis hide />
               <Tooltip
                 contentStyle={{
@@ -75,7 +75,7 @@ const Portfolio = () => (
                 }}
                 formatter={(v: number) => [`₹${v.toLocaleString("en-IN")}`, "Value"]}
               />
-              <Area type="monotone" dataKey="value" stroke="hsl(221, 83%, 53%)" strokeWidth={2} fill="url(#growthGrad)" />
+              <Area type="monotone" dataKey="value" stroke="hsl(var(--foreground))" strokeWidth={1.5} fill="url(#growthGrad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -83,14 +83,14 @@ const Portfolio = () => (
     </motion.div>
 
     {/* Allocation */}
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-      <h3 className="mb-3 font-display text-base font-semibold text-foreground">Allocation</h3>
-      <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+      <h3 className="mb-3 font-display text-sm font-semibold tracking-tight text-foreground">Allocation</h3>
+      <div className="rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-4">
-          <div className="h-32 w-32">
+          <div className="h-28 w-28">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={allocation} innerRadius={35} outerRadius={55} paddingAngle={4} dataKey="value" strokeWidth={0}>
+                <Pie data={allocation} innerRadius={32} outerRadius={50} paddingAngle={3} dataKey="value" strokeWidth={0}>
                   {allocation.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
@@ -98,12 +98,12 @@ const Portfolio = () => (
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-2.5">
             {allocation.map((a) => (
               <div key={a.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: a.color }} />
-                  <span className="text-xs text-foreground">{a.name}</span>
+                  <div className="h-2 w-2 rounded-full" style={{ backgroundColor: a.color }} />
+                  <span className="text-xs text-muted-foreground">{a.name}</span>
                 </div>
                 <span className="text-xs font-semibold text-foreground">{a.value}%</span>
               </div>
@@ -114,14 +114,14 @@ const Portfolio = () => (
     </motion.div>
 
     {/* Holdings */}
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-      <h3 className="mb-3 font-display text-base font-semibold text-foreground">Holdings</h3>
+    <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+      <h3 className="mb-3 font-display text-sm font-semibold tracking-tight text-foreground">Holdings</h3>
       <div className="space-y-2">
         {holdings.map((h) => (
-          <div key={h.name} className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-card">
+          <div key={h.name} className="flex items-center justify-between rounded-2xl border border-border bg-card p-4">
             <div>
               <h4 className="text-sm font-semibold text-foreground">{h.name}</h4>
-              <p className="text-xs text-muted-foreground">{h.value}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{h.value}</p>
             </div>
             <span className="text-sm font-semibold text-success">{h.change}</span>
           </div>

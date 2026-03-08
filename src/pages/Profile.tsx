@@ -26,34 +26,34 @@ const Profile = () => {
   const displayContact = user?.email || user?.phone || "";
 
   return (
-    <div className="space-y-6 px-5 pb-4 pt-6">
-      <h1 className="font-display text-xl font-bold text-foreground">Profile</h1>
+    <div className="space-y-6 px-5 pb-4 pt-8">
+      <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Profile</h1>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-card"
+        className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5"
       >
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-          <User className="h-7 w-7 text-primary" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary">
+          <User className="h-5 w-5 text-foreground" />
         </div>
         <div>
           <h3 className="font-display text-base font-bold text-foreground">{displayName}</h3>
-          <p className="text-sm text-muted-foreground">{displayContact}</p>
+          <p className="text-xs text-muted-foreground mt-0.5">{displayContact}</p>
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
-          <Globe className="h-4 w-4" /> Language
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+        <h3 className="mb-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          Language
         </h3>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5">
           {languages.map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
-              className={`rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
-                lang === l ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"
+              className={`rounded-full px-4 py-2 text-xs font-semibold transition-all ${
+                lang === l ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:text-foreground"
               }`}
             >
               {l}
@@ -62,43 +62,43 @@ const Profile = () => {
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
         <button
           onClick={toggleTheme}
-          className="flex w-full items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-card"
+          className="flex w-full items-center justify-between rounded-2xl border border-border bg-card p-4"
         >
           <div className="flex items-center gap-3">
-            {isDark ? <Moon className="h-5 w-5 text-accent" /> : <Sun className="h-5 w-5 text-warning" />}
+            {isDark ? <Moon className="h-4 w-4 text-muted-foreground" /> : <Sun className="h-4 w-4 text-warning" />}
             <span className="text-sm font-medium text-foreground">{isDark ? "Dark Mode" : "Light Mode"}</span>
           </div>
-          <div className={`flex h-7 w-12 items-center rounded-full p-1 transition-colors ${isDark ? "bg-primary" : "bg-border"}`}>
-            <div className={`h-5 w-5 rounded-full bg-card shadow transition-transform ${isDark ? "translate-x-5" : "translate-x-0"}`} />
+          <div className={`flex h-6 w-11 items-center rounded-full p-0.5 transition-colors ${isDark ? "bg-foreground" : "bg-border"}`}>
+            <div className={`h-5 w-5 rounded-full bg-background shadow-sm transition-transform ${isDark ? "translate-x-5" : "translate-x-0"}`} />
           </div>
         </button>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-2">
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-1.5">
         {[
           { icon: Shield, label: "Privacy & Security" },
           { icon: HelpCircle, label: "Help & Support" },
         ].map((item) => (
           <button
             key={item.label}
-            className="flex w-full items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-card"
+            className="flex w-full items-center justify-between rounded-2xl border border-border bg-card p-4 hover:shadow-card-hover transition-all"
           >
             <div className="flex items-center gap-3">
-              <item.icon className="h-5 w-5 text-muted-foreground" />
+              <item.icon className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium text-foreground">{item.label}</span>
             </div>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
           </button>
         ))}
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
         <button
           onClick={handleSignOut}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm font-semibold text-destructive"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-destructive/15 bg-destructive/5 p-4 text-sm font-semibold text-destructive hover:bg-destructive/10 transition-colors"
         >
           <LogOut className="h-4 w-4" />
           Sign Out
