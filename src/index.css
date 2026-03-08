@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,103 +6,103 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 99%;
+    --foreground: 240 10% 6%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 240 10% 6%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 240 10% 6%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 240 5% 12%;
+    --primary-foreground: 0 0% 99%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 10% 6%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
 
-    --accent: 174 72% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 240 10% 6%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 99%;
 
-    --success: 142 76% 36%;
+    --success: 152 69% 41%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 36 100% 57%;
+    --warning-foreground: 240 10% 6%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 221 83% 53%;
+    --border: 240 6% 93%;
+    --input: 240 6% 93%;
+    --ring: 240 5% 12%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
     --chart-blue: 221 83% 53%;
-    --chart-teal: 174 72% 40%;
-    --chart-green: 142 76% 36%;
+    --chart-teal: 158 64% 52%;
+    --chart-green: 152 69% 41%;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 0 0% 99%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 240 6% 93%;
+    --sidebar-ring: 240 5% 12%;
   }
 
   .dark {
-    --background: 228 15% 8%;
-    --foreground: 210 40% 96%;
+    --background: 240 10% 4%;
+    --foreground: 0 0% 95%;
 
-    --card: 225 16% 12%;
-    --card-foreground: 210 40% 96%;
+    --card: 240 8% 8%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 225 16% 12%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 240 8% 8%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 240 10% 4%;
 
-    --secondary: 225 16% 16%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 240 6% 12%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 225 16% 16%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 240 6% 12%;
+    --muted-foreground: 240 4% 55%;
 
-    --accent: 174 72% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 158 64% 52%;
+    --accent-foreground: 240 10% 4%;
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 99%;
 
-    --success: 142 76% 36%;
+    --success: 152 69% 46%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 36 100% 57%;
+    --warning-foreground: 240 10% 4%;
 
-    --border: 225 16% 20%;
-    --input: 225 16% 20%;
-    --ring: 221 83% 53%;
+    --border: 240 6% 15%;
+    --input: 240 6% 15%;
+    --ring: 0 0% 95%;
 
     --chart-blue: 221 83% 60%;
-    --chart-teal: 174 72% 50%;
-    --chart-green: 142 76% 45%;
+    --chart-teal: 158 64% 58%;
+    --chart-green: 152 69% 50%;
 
-    --sidebar-background: 228 15% 8%;
+    --sidebar-background: 240 10% 4%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-primary: 0 0% 95%;
+    --sidebar-primary-foreground: 240 10% 4%;
+    --sidebar-accent: 240 6% 12%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 240 6% 15%;
+    --sidebar-ring: 0 0% 95%;
   }
 }
 
@@ -112,27 +112,35 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   h1, h2, h3 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    background: linear-gradient(145deg, hsl(240 5% 12%), hsl(240 8% 22%));
+  }
+  .dark .gradient-primary {
+    background: linear-gradient(145deg, hsl(240 6% 16%), hsl(240 8% 24%));
+  }
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(158 64% 52%), hsl(158 64% 42%));
   }
   .gradient-card {
     background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--secondary)));
   }
   .shadow-card {
-    box-shadow: 0 2px 16px -4px hsl(var(--primary) / 0.08), 0 1px 4px -1px hsl(var(--primary) / 0.04);
+    box-shadow: 0 1px 3px 0 hsl(240 6% 10% / 0.04), 0 1px 2px -1px hsl(240 6% 10% / 0.04);
   }
   .shadow-card-hover {
-    box-shadow: 0 8px 30px -8px hsl(var(--primary) / 0.15), 0 2px 8px -2px hsl(var(--primary) / 0.06);
+    box-shadow: 0 4px 12px -2px hsl(240 6% 10% / 0.08), 0 2px 4px -2px hsl(240 6% 10% / 0.04);
   }
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);

@@ -7,40 +7,30 @@ const topics = [
     title: "Stock Market Basics",
     desc: "Learn what stocks are and how the market works",
     duration: "5 min read",
-    color: "text-primary",
-    bg: "bg-primary/10",
   },
   {
     icon: PieChart,
     title: "Mutual Funds 101",
     desc: "Understand how mutual funds pool money for investing",
     duration: "4 min read",
-    color: "text-accent",
-    bg: "bg-accent/10",
   },
   {
     icon: Shield,
     title: "Risk Management",
     desc: "How to protect your investments from big losses",
     duration: "6 min read",
-    color: "text-warning",
-    bg: "bg-warning/10",
   },
   {
     icon: BookOpen,
     title: "Power of Diversification",
     desc: "Why putting all eggs in one basket is risky",
     duration: "3 min read",
-    color: "text-success",
-    bg: "bg-success/10",
   },
   {
     icon: Clock,
     title: "SIP: The Smart Way",
     desc: "How systematic investing builds wealth over time",
     duration: "4 min read",
-    color: "text-primary",
-    bg: "bg-primary/10",
   },
 ];
 
@@ -90,53 +80,53 @@ const youtubeVideos = [
 ];
 
 const Learn = () => (
-  <div className="space-y-5 px-5 pb-4 pt-6">
+  <div className="space-y-7 px-5 pb-4 pt-8">
     <div>
-      <h1 className="font-display text-xl font-bold text-foreground">Learn</h1>
-      <p className="text-sm text-muted-foreground">Build your financial knowledge</p>
+      <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Learn</h1>
+      <p className="text-xs text-muted-foreground mt-0.5">Build your financial knowledge</p>
     </div>
 
     {/* Featured */}
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="gradient-primary overflow-hidden rounded-2xl p-5 shadow-card"
+      className="gradient-primary overflow-hidden rounded-2xl p-6"
     >
-      <span className="rounded-lg bg-primary-foreground/20 px-2 py-1 text-[10px] font-semibold text-primary-foreground">
+      <span className="rounded-full bg-primary-foreground/15 px-2.5 py-1 text-[10px] font-semibold text-primary-foreground">
         Featured
       </span>
       <h3 className="mt-3 font-display text-lg font-bold text-primary-foreground">
         Investing for Beginners
       </h3>
-      <p className="mt-1 text-sm text-primary-foreground/70">
+      <p className="mt-1.5 text-sm text-primary-foreground/50">
         A complete guide to start your investment journey with just ₹500.
       </p>
-      <button className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground">
+      <button className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
         Start Learning <ChevronRight className="h-4 w-4" />
       </button>
     </motion.div>
 
     {/* Topics */}
-    <div className="space-y-3">
+    <div className="space-y-2">
       {topics.map((t, i) => {
         const Icon = t.icon;
         return (
           <motion.button
             key={t.title}
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="flex w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-card transition-shadow hover:shadow-card-hover"
+            transition={{ delay: i * 0.04 }}
+            className="flex w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left transition-all hover:shadow-card-hover active:scale-[0.99]"
           >
-            <div className={`rounded-xl p-2.5 ${t.bg}`}>
-              <Icon className={`h-5 w-5 ${t.color}`} />
+            <div className="rounded-xl bg-secondary p-2.5">
+              <Icon className="h-4 w-4 text-foreground" />
             </div>
             <div className="flex-1">
               <h4 className="text-sm font-semibold text-foreground">{t.title}</h4>
-              <p className="text-xs text-muted-foreground">{t.desc}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{t.desc}</p>
             </div>
             <div className="flex flex-col items-end gap-1">
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
               <span className="text-[10px] text-muted-foreground">{t.duration}</span>
             </div>
           </motion.button>
@@ -145,34 +135,34 @@ const Learn = () => (
     </div>
 
     {/* YouTube Videos */}
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-base font-bold text-foreground">Top YouTube Videos</h2>
-        <Play className="h-4 w-4 text-destructive" />
+        <h2 className="font-display text-sm font-semibold tracking-tight text-foreground">Top YouTube Videos</h2>
+        <Play className="h-3.5 w-3.5 text-destructive" />
       </div>
       {youtubeVideos.map((v, i) => (
         <motion.button
           key={v.url}
           onClick={() => window.open(v.url, "_blank", "noopener,noreferrer")}
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.05 }}
-          className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left shadow-card transition-shadow hover:shadow-card-hover"
+          transition={{ delay: i * 0.04 }}
+          className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left transition-all hover:shadow-card-hover active:scale-[0.99]"
         >
-          <div className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
+          <div className="relative h-14 w-22 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
             <img src={v.thumbnail} alt={v.title} className="h-full w-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-              <Play className="h-5 w-5 fill-white text-white" />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+              <Play className="h-4 w-4 fill-white text-white" />
             </div>
-            <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 py-0.5 text-[9px] font-medium text-white">
+            <span className="absolute bottom-1 right-1 rounded bg-black/60 px-1 py-0.5 text-[9px] font-medium text-white">
               {v.duration}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-semibold text-foreground line-clamp-2">{v.title}</h4>
-            <p className="mt-0.5 text-xs text-muted-foreground">{v.channel}</p>
+            <h4 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug">{v.title}</h4>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">{v.channel}</p>
           </div>
-          <ExternalLink className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+          <ExternalLink className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground/40" />
         </motion.button>
       ))}
     </div>

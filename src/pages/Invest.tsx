@@ -23,7 +23,7 @@ const riskColor: Record<string, string> = {
 };
 
 const aiPicks = ["NIFTYBEES.NS", "GOLDBEES.NS", "HDFCBANK.NS", "INFY.NS", "TCS.NS"];
-const mfAiPicks = [122639, 118989, 120505]; // UTI Nifty 50, PPFAS, Axis Bluechip
+const mfAiPicks = [122639, 118989, 120505];
 
 const sparkline = (price: number, change: number) => {
   const base = price - change;
@@ -55,7 +55,6 @@ const SkeletonCard = () => (
   </div>
 );
 
-// Stock/ETF card
 const StockCard = ({
   q,
   i,
@@ -73,17 +72,17 @@ const StockCard = ({
   return (
     <motion.div
       key={q.symbol}
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: i * 0.03 }}
+      transition={{ delay: i * 0.025 }}
       onClick={() => navigate(`/stock/${encodeURIComponent(q.symbol)}`)}
-      className="cursor-pointer rounded-2xl border border-border bg-card p-4 shadow-card transition-shadow hover:shadow-card-hover"
+      className="cursor-pointer rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-card-hover active:scale-[0.99]"
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-1">
           <div className="flex items-center gap-2">
             <h4 className="text-sm font-semibold text-foreground">{q.name}</h4>
-            {isAiPick && <Sparkles className="h-3.5 w-3.5 text-accent" />}
+            {isAiPick && <Sparkles className="h-3 w-3 text-accent" />}
           </div>
           <p className="text-xs text-muted-foreground">
             ₹{q.price.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
@@ -97,22 +96,22 @@ const StockCard = ({
         </span>
       </div>
       <div className="mt-3 flex items-end justify-between">
-        <div className="flex items-center gap-2">
-          <span className={`rounded-lg px-2 py-0.5 text-[10px] font-semibold ${riskColor[risk]}`}>
-            <Shield className="mr-0.5 inline h-3 w-3" />{risk} Risk
+        <div className="flex items-center gap-1.5">
+          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${riskColor[risk]}`}>
+            {risk}
           </span>
           {isAiPick && (
-            <span className="rounded-lg bg-accent/10 px-2 py-0.5 text-[10px] font-semibold text-accent">
+            <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold text-accent">
               AI Pick
             </span>
           )}
         </div>
-        <div className="h-10 w-20">
+        <div className="h-9 w-20">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>
                 <linearGradient id={`inv-g-${i}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={isUp ? "hsl(var(--success))" : "hsl(var(--destructive))"} stopOpacity={0.3} />
+                  <stop offset="0%" stopColor={isUp ? "hsl(var(--success))" : "hsl(var(--destructive))"} stopOpacity={0.2} />
                   <stop offset="100%" stopColor={isUp ? "hsl(var(--success))" : "hsl(var(--destructive))"} stopOpacity={0} />
                 </linearGradient>
               </defs>
@@ -125,7 +124,6 @@ const StockCard = ({
   );
 };
 
-// Mutual Fund card
 const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: (path: string) => void }) => {
   const isAiPick = mfAiPicks.includes(fund.code);
   const bestReturn = fund.returns1Y ?? fund.returns3M ?? fund.returns1M ?? 0;
@@ -133,22 +131,22 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: i * 0.03 }}
+      transition={{ delay: i * 0.025 }}
       onClick={() => navigate(`/mutual-fund/${fund.code}`)}
-      className="cursor-pointer rounded-2xl border border-border bg-card p-4 shadow-card transition-shadow hover:shadow-card-hover"
+      className="cursor-pointer rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-card-hover active:scale-[0.99]"
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-1">
           <div className="flex items-center gap-2">
             <h4 className="text-sm font-semibold text-foreground">{fund.name}</h4>
-            {isAiPick && <Sparkles className="h-3.5 w-3.5 text-accent" />}
+            {isAiPick && <Sparkles className="h-3 w-3 text-accent" />}
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">{fund.category}</span>
-            <span className="text-muted-foreground">•</span>
-            <span className="text-xs text-muted-foreground">{fund.amc}</span>
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <span>{fund.category}</span>
+            <span className="text-border">•</span>
+            <span>{fund.amc}</span>
           </div>
         </div>
         <div className="text-right">
@@ -157,14 +155,13 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
         </div>
       </div>
 
-      {/* Returns row */}
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-3 flex items-center gap-2">
         {[
           { label: "1M", val: fund.returns1M },
           { label: "3M", val: fund.returns3M },
           { label: "1Y", val: fund.returns1Y },
         ].map((r) => (
-          <div key={r.label} className="flex-1 rounded-xl bg-secondary p-2 text-center">
+          <div key={r.label} className="flex-1 rounded-xl bg-secondary/60 p-2 text-center">
             <p className="text-[10px] text-muted-foreground">{r.label}</p>
             <p className={`text-xs font-bold ${r.val !== null && r.val >= 0 ? "text-success" : "text-destructive"}`}>
               {r.val !== null ? `${r.val >= 0 ? "+" : ""}${r.val.toFixed(1)}%` : "—"}
@@ -174,22 +171,22 @@ const MFCard = ({ fund, i, navigate }: { fund: MutualFund; i: number; navigate: 
       </div>
 
       <div className="mt-3 flex items-end justify-between">
-        <div className="flex items-center gap-2">
-          <span className={`rounded-lg px-2 py-0.5 text-[10px] font-semibold ${riskColor[fund.risk]}`}>
-            <Shield className="mr-0.5 inline h-3 w-3" />{fund.risk} Risk
+        <div className="flex items-center gap-1.5">
+          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${riskColor[fund.risk]}`}>
+            {fund.risk}
           </span>
           {isAiPick && (
-            <span className="rounded-lg bg-accent/10 px-2 py-0.5 text-[10px] font-semibold text-accent">
+            <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold text-accent">
               AI Pick
             </span>
           )}
         </div>
-        <div className="h-10 w-20">
+        <div className="h-9 w-20">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={fund.navHistory}>
               <defs>
                 <linearGradient id={`mf-g-${i}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={isUp ? "hsl(var(--success))" : "hsl(var(--destructive))"} stopOpacity={0.3} />
+                  <stop offset="0%" stopColor={isUp ? "hsl(var(--success))" : "hsl(var(--destructive))"} stopOpacity={0.2} />
                   <stop offset="100%" stopColor={isUp ? "hsl(var(--success))" : "hsl(var(--destructive))"} stopOpacity={0} />
                 </linearGradient>
               </defs>
@@ -237,34 +234,34 @@ const Invest = () => {
   };
 
   return (
-    <div className="space-y-5 px-5 pb-4 pt-6">
+    <div className="space-y-5 px-5 pb-4 pt-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-xl font-bold text-foreground">Invest</h1>
-          <p className="text-sm text-muted-foreground">Live market data</p>
+          <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Invest</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">Live market data</p>
         </div>
-        <button onClick={handleRefresh} className="rounded-lg bg-secondary p-2" disabled={loading}>
+        <button onClick={handleRefresh} className="rounded-xl bg-secondary p-2 hover:bg-secondary/80 transition-colors" disabled={loading}>
           <RefreshCw className={`h-4 w-4 text-muted-foreground ${loading ? "animate-spin" : ""}`} />
         </button>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
         <Input
           placeholder="Search stocks, ETFs, mutual funds..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-11 rounded-xl border-border pl-10"
+          className="h-11 rounded-xl border-border bg-secondary/50 pl-11 text-sm placeholder:text-muted-foreground/40"
         />
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="flex gap-1.5 overflow-x-auto pb-1">
         {categories.map((c) => (
           <button
             key={c}
             onClick={() => setActive(c)}
-            className={`whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition-all ${
-              active === c ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"
+            className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-all ${
+              active === c ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:text-foreground"
             }`}
           >
             {c}
@@ -272,9 +269,8 @@ const Invest = () => {
         ))}
       </div>
 
-      {/* Stocks & ETFs */}
       {showStocks && (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {stocksLoading && quotes.length === 0
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`s-${i}`} />)
             : filteredStocks.map((q, i) => (
@@ -283,15 +279,14 @@ const Invest = () => {
         </div>
       )}
 
-      {/* Mutual Funds section */}
       {showMF && (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {(active === "All" && filteredMF.length > 0) && (
-            <div className="flex items-center gap-2 pt-2">
-              <TrendingUp className="h-4 w-4 text-primary" />
-              <h3 className="font-display text-base font-semibold text-foreground">Mutual Funds</h3>
-              <span className="rounded-lg bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                {filteredMF.length} funds
+            <div className="flex items-center gap-2 pt-1">
+              <TrendingUp className="h-3.5 w-3.5 text-foreground" />
+              <h3 className="font-display text-sm font-semibold text-foreground">Mutual Funds</h3>
+              <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                {filteredMF.length}
               </span>
             </div>
           )}
@@ -304,12 +299,12 @@ const Invest = () => {
       )}
 
       {!loading && filteredStocks.length === 0 && filteredMF.length === 0 && (
-        <p className="py-8 text-center text-sm text-muted-foreground">No results found</p>
+        <p className="py-12 text-center text-sm text-muted-foreground">No results found</p>
       )}
 
       {(quotes.length > 0 || mutualFunds.length > 0) && (
-        <p className="text-center text-[10px] text-muted-foreground">
-          Stocks: Yahoo Finance • Mutual Funds: MFAPI • Data may be delayed
+        <p className="text-center text-[10px] text-muted-foreground/50 pb-2">
+          Data may be delayed up to 15 minutes
         </p>
       )}
     </div>

@@ -59,62 +59,60 @@ const Auth = () => {
   return (
     <div className="flex min-h-screen flex-col px-6 py-12">
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-12 flex items-center gap-3"
+        className="mb-16 flex items-center gap-3"
       >
-        <div className="gradient-primary flex h-10 w-10 items-center justify-center rounded-xl">
-          <TrendingUp className="h-5 w-5 text-primary-foreground" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-foreground">
+          <TrendingUp className="h-4.5 w-4.5 text-background" />
         </div>
-        <span className="font-display text-xl font-bold text-foreground">StoxMate</span>
+        <span className="font-display text-lg font-bold tracking-tight text-foreground">StoxMate</span>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
         className="flex-1 space-y-8"
       >
-        <div className="space-y-2">
-          <h1 className="font-display text-2xl font-bold text-foreground">
+        <div className="space-y-1.5">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">
             {isSignUp ? "Create account" : "Welcome back"}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {isSignUp
-              ? "Sign up to start your investment journey"
-              : "Sign in to continue building your wealth"}
+            {isSignUp ? "Sign up to start investing" : "Sign in to continue"}
           </p>
         </div>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Email</label>
+        <div className="space-y-3.5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
               <Input
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 rounded-xl border-border pl-10 text-base"
+                className="h-12 rounded-xl border-border bg-secondary/50 pl-11 text-sm placeholder:text-muted-foreground/40"
               />
             </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Password</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60" />
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Min 6 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-12 rounded-xl border-border pl-10 pr-10 text-base"
+                className="h-12 rounded-xl border-border bg-secondary/50 pl-11 pr-11 text-sm placeholder:text-muted-foreground/40"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-muted-foreground transition-colors"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
@@ -123,21 +121,21 @@ const Auth = () => {
           <Button
             onClick={handleEmailAuth}
             disabled={loading}
-            className="w-full rounded-2xl py-6 text-base font-semibold"
+            className="w-full rounded-xl h-12 text-sm font-semibold tracking-wide"
           >
-            {loading ? "Please wait..." : isSignUp ? "Sign Up" : "Sign In"}
+            {loading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
           </Button>
           <button
             onClick={() => setIsSignUp(!isSignUp)}
-            className="w-full text-center text-sm text-muted-foreground"
+            className="w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             {isSignUp ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="h-px flex-1 bg-border" />
-          <span className="text-xs text-muted-foreground">or</span>
+          <span className="text-[11px] uppercase tracking-wider text-muted-foreground/60">or</span>
           <div className="h-px flex-1 bg-border" />
         </div>
 
@@ -145,9 +143,9 @@ const Auth = () => {
           variant="outline"
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full rounded-2xl py-6 text-base font-medium border-border"
+          className="w-full rounded-xl h-12 text-sm font-medium border-border hover:bg-secondary/80"
         >
-          <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
+          <svg className="mr-2.5 h-4 w-4" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
