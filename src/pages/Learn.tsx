@@ -119,7 +119,7 @@ const Learn = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
-            onClick={() => navigate("/ai-advisor")}
+            onClick={() => navigate(`/ai-advisor?q=${encodeURIComponent("Explain " + t.title + ": " + t.desc)}`)}
             className="flex w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left transition-all hover:shadow-card-hover active:scale-[0.99]"
           >
             <div className="rounded-xl bg-secondary p-2.5">
