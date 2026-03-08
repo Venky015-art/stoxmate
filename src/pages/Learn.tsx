@@ -104,7 +104,7 @@ const Learn = () => {
       <p className="mt-1.5 text-sm text-primary-foreground/50">
         A complete guide to start your investment journey with just ₹500.
       </p>
-      <button className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
+      <button onClick={() => navigate("/ai-advisor")} className="mt-4 flex items-center gap-1 text-sm font-semibold text-primary-foreground hover:opacity-80 transition-opacity">
         Start Learning <ChevronRight className="h-4 w-4" />
       </button>
     </motion.div>
