@@ -3,46 +3,45 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { TrendingUp, Smartphone } from "lucide-react";
+import { TrendingUp, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const [phone, setPhone] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSendOtp = async () => {
-    if (phone.length < 10) return;
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: `+91${phone}`,
-    });
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-    } else {
-      setOtpSent(true);
-      toast.success("OTP sent!");
+  const handleEmailAuth = async () => {
+    if (!email || password.length < 6) {
+      toast.error("Please enter a valid email and password (min 6 chars)");
+      return;
     }
-  };
-
-  const handleVerify = async () => {
-    if (otp.length < 6) return;
     setLoading(true);
-    const { error } = await supabase.auth.verifyOtp({
-      phone: `+91${phone}`,
-      token: otp,
-      type: "sms",
-    });
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: window.location.origin },
+      });
+      setLoading(false);
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Check your email to confirm your account!");
+      }
     } else {
-      navigate("/home");
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      setLoading(false);
+      if (error) {
+        toast.error(error.message);
+      } else {
+        navigate("/home");
+      }
     }
   };
 
@@ -78,65 +77,63 @@ const Auth = () => {
       >
         <div className="space-y-2">
           <h1 className="font-display text-2xl font-bold text-foreground">
-            {otpSent ? "Enter OTP" : "Welcome back"}
+            {isSignUp ? "Create account" : "Welcome back"}
           </h1>
           <p className="text-sm text-muted-foreground">
-            {otpSent
-              ? `We sent a code to +91 ${phone}`
+            {isSignUp
+              ? "Sign up to start your investment journey"
               : "Sign in to continue building your wealth"}
           </p>
         </div>
 
-        {!otpSent ? (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Phone Number</label>
-              <div className="flex items-center gap-2">
-                <div className="flex h-12 items-center rounded-xl border border-border bg-secondary px-3 text-sm text-muted-foreground">
-                  +91
-                </div>
-                <Input
-                  type="tel"
-                  placeholder="Enter your number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                  className="h-12 rounded-xl border-border text-base"
-                />
-              </div>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Email</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-12 rounded-xl border-border pl-10 text-base"
+              />
             </div>
-            <Button
-              onClick={handleSendOtp}
-              disabled={phone.length < 10 || loading}
-              className="w-full rounded-2xl py-6 text-base font-semibold"
-            >
-              <Smartphone className="mr-2 h-4 w-4" />
-              {loading ? "Sending..." : "Send OTP"}
-            </Button>
           </div>
-        ) : (
-          <div className="space-y-4">
-            <Input
-              type="text"
-              placeholder="Enter 6-digit OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              className="h-14 rounded-xl text-center text-2xl tracking-[0.5em] border-border"
-            />
-            <Button
-              onClick={handleVerify}
-              disabled={otp.length < 6 || loading}
-              className="w-full rounded-2xl py-6 text-base font-semibold"
-            >
-              {loading ? "Verifying..." : "Verify & Continue"}
-            </Button>
-            <button
-              onClick={() => { setOtpSent(false); setOtp(""); }}
-              className="w-full text-center text-sm text-muted-foreground"
-            >
-              Change number
-            </button>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Min 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-12 rounded-xl border-border pl-10 pr-10 text-base"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
-        )}
+          <Button
+            onClick={handleEmailAuth}
+            disabled={loading}
+            className="w-full rounded-2xl py-6 text-base font-semibold"
+          >
+            {loading ? "Please wait..." : isSignUp ? "Sign Up" : "Sign In"}
+          </Button>
+          <button
+            onClick={() => setIsSignUp(!isSignUp)}
+            className="w-full text-center text-sm text-muted-foreground"
+          >
+            {isSignUp ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
+          </button>
+        </div>
 
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
