@@ -1,16 +1,12 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, ArrowDownRight, Sparkles, Bell, TrendingUp } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, Sparkles, Bell, TrendingUp, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { useMarketData, type MarketQuote } from "@/hooks/useMarketData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const chartData = [
   { v: 24 }, { v: 28 }, { v: 26 }, { v: 32 }, { v: 30 }, { v: 38 }, { v: 35 }, { v: 42 }, { v: 40 }, { v: 48 }, { v: 45 }, { v: 52 },
-];
-
-const marketData = [
-  { name: "NIFTY 50", value: "22,456.80", change: "+1.24%", up: true },
-  { name: "SENSEX", value: "73,876.44", change: "+0.98%", up: true },
-  { name: "BANK NIFTY", value: "48,234.15", change: "-0.32%", up: false },
 ];
 
 const suggestions = [
@@ -19,8 +15,28 @@ const suggestions = [
   { title: "Add Gold ETF to your portfolio", desc: "Hedge against inflation", tag: "New" },
 ];
 
+const formatPrice = (price: number) => {
+  if (price >= 10000) return price.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+  return price.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+};
+
+const MarketCard = ({ quote }: { quote: MarketQuote }) => {
+  const isUp = quote.change >= 0;
+  return (
+    <div className="min-w-[150px] rounded-2xl border border-border bg-card p-3.5 shadow-card">
+      <p className="text-xs text-muted-foreground">{quote.name}</p>
+      <p className="mt-1 font-display text-sm font-bold text-foreground">{formatPrice(quote.price)}</p>
+      <div className={`mt-1 flex items-center gap-0.5 text-xs font-medium ${isUp ? "text-success" : "text-destructive"}`}>
+        {isUp ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+        {isUp ? "+" : ""}{quote.changePercent.toFixed(2)}%
+      </div>
+    </div>
+  );
+};
+
 const Home = () => {
   const navigate = useNavigate();
+  const { data: marketData, loading, refetch } = useMarketData(["^NSEI", "^BSESN", "^NSEBANK"]);
 
   return (
     <div className="space-y-6 px-5 pb-4 pt-6">
@@ -66,21 +82,30 @@ const Home = () => {
         </div>
       </motion.div>
 
-      {/* Market Summary */}
+      {/* Market Summary - LIVE DATA */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <h3 className="mb-3 font-display text-base font-semibold text-foreground">Today's Market</h3>
-        <div className="flex gap-3 overflow-x-auto pb-1">
-          {marketData.map((m) => (
-            <div key={m.name} className="min-w-[140px] rounded-2xl border border-border bg-card p-3.5 shadow-card">
-              <p className="text-xs text-muted-foreground">{m.name}</p>
-              <p className="mt-1 font-display text-sm font-bold text-foreground">{m.value}</p>
-              <div className={`mt-1 flex items-center gap-0.5 text-xs font-medium ${m.up ? "text-success" : "text-destructive"}`}>
-                {m.up ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                {m.change}
-              </div>
-            </div>
-          ))}
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="font-display text-base font-semibold text-foreground">Today's Market</h3>
+          <button onClick={refetch} className="rounded-lg bg-secondary p-1.5" disabled={loading}>
+            <RefreshCw className={`h-3.5 w-3.5 text-muted-foreground ${loading ? "animate-spin" : ""}`} />
+          </button>
         </div>
+        <div className="flex gap-3 overflow-x-auto pb-1">
+          {loading && marketData.length === 0
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="min-w-[150px] rounded-2xl border border-border bg-card p-3.5">
+                  <Skeleton className="mb-2 h-3 w-16" />
+                  <Skeleton className="mb-1 h-5 w-24" />
+                  <Skeleton className="h-3 w-12" />
+                </div>
+              ))
+            : marketData.map((q) => <MarketCard key={q.symbol} quote={q} />)}
+        </div>
+        {marketData.length > 0 && (
+          <p className="mt-1.5 text-[10px] text-muted-foreground">
+            Live data from Yahoo Finance • Auto-refreshes every minute
+          </p>
+        )}
       </motion.div>
 
       {/* AI Suggestions */}
