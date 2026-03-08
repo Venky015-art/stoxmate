@@ -158,22 +158,27 @@ const StockCard = ({
       onClick={() => navigate(`/stock/${encodeURIComponent(q.symbol)}`)}
       className="cursor-pointer rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-card-hover active:scale-[0.99]"
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1 space-y-1">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-foreground">{q.name}</h4>
-            {isAiPick && <Sparkles className="h-3 w-3 text-accent" />}
+      <div className="flex items-start gap-3">
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${sectorStyle.bg}`}>
+          <SectorIcon className={`h-5 w-5 ${sectorStyle.fg}`} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <h4 className="text-sm font-semibold text-foreground truncate">{q.name}</h4>
+              {isAiPick && <Sparkles className="h-3 w-3 shrink-0 text-accent" />}
+            </div>
+            <span className={`font-display text-sm font-bold shrink-0 ml-2 ${isUp ? "text-success" : "text-destructive"}`}>
+              <span className="flex items-center gap-0.5">
+                {isUp ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                {isUp ? "+" : ""}{q.changePercent.toFixed(2)}%
+              </span>
+            </span>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground mt-0.5">
             ₹{q.price.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
           </p>
         </div>
-        <span className={`font-display text-sm font-bold ${isUp ? "text-success" : "text-destructive"}`}>
-          <span className="flex items-center gap-0.5">
-            {isUp ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-            {isUp ? "+" : ""}{q.changePercent.toFixed(2)}%
-          </span>
-        </span>
       </div>
       <div className="mt-3 flex items-end justify-between">
         <div className="flex items-center gap-1.5">
