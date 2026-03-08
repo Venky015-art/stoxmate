@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, PieChart, Shield, Clock, ChevronRight } from "lucide-react";
+import { BookOpen, TrendingUp, PieChart, Shield, Clock, ChevronRight, Play, ExternalLink } from "lucide-react";
 
 const topics = [
   {
@@ -41,6 +41,51 @@ const topics = [
     duration: "4 min read",
     color: "text-primary",
     bg: "bg-primary/10",
+  },
+];
+
+const youtubeVideos = [
+  {
+    title: "Stock Market for Beginners",
+    channel: "CA Rachana Ranade",
+    url: "https://www.youtube.com/watch?v=_yGOcOKF6gA",
+    thumbnail: "https://img.youtube.com/vi/_yGOcOKF6gA/mqdefault.jpg",
+    duration: "22 min",
+  },
+  {
+    title: "Mutual Funds Explained",
+    channel: "Warikoo",
+    url: "https://www.youtube.com/watch?v=UyXGwCRpWOQ",
+    thumbnail: "https://img.youtube.com/vi/UyXGwCRpWOQ/mqdefault.jpg",
+    duration: "18 min",
+  },
+  {
+    title: "How to Invest in Share Market",
+    channel: "Pranjal Kamra",
+    url: "https://www.youtube.com/watch?v=vP8lRBXEjYQ",
+    thumbnail: "https://img.youtube.com/vi/vP8lRBXEjYQ/mqdefault.jpg",
+    duration: "15 min",
+  },
+  {
+    title: "SIP Investment Complete Guide",
+    channel: "Labour Law Advisor",
+    url: "https://www.youtube.com/watch?v=MaUyx85MxSk",
+    thumbnail: "https://img.youtube.com/vi/MaUyx85MxSk/mqdefault.jpg",
+    duration: "20 min",
+  },
+  {
+    title: "Basics of Stock Market for Beginners",
+    channel: "Pushkar Raj Thakur",
+    url: "https://www.youtube.com/watch?v=5JQFSx6nmso",
+    thumbnail: "https://img.youtube.com/vi/5JQFSx6nmso/mqdefault.jpg",
+    duration: "25 min",
+  },
+  {
+    title: "Index Funds vs Mutual Funds",
+    channel: "Akshat Shrivastava",
+    url: "https://www.youtube.com/watch?v=jzkaEY_e0xg",
+    thumbnail: "https://img.youtube.com/vi/jzkaEY_e0xg/mqdefault.jpg",
+    duration: "17 min",
   },
 ];
 
