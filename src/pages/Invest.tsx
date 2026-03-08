@@ -11,6 +11,41 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const categoryKeys = ["all", "stocks", "etfs", "mutualFunds"] as const;
 
+const sectorKeys = ["all", "banking", "it", "pharma", "auto", "fmcg", "energy", "metals", "infra", "insurance", "etf"] as const;
+type Sector = typeof sectorKeys[number];
+
+const SYMBOL_SECTORS: Record<string, Sector> = {
+  "HDFCBANK.NS": "banking", "ICICIBANK.NS": "banking", "SBIN.NS": "banking",
+  "KOTAKBANK.NS": "banking", "AXISBANK.NS": "banking", "INDUSINDBK.NS": "banking",
+  "BAJFINANCE.NS": "banking", "BAJAJFINSV.NS": "banking",
+  "TCS.NS": "it", "INFY.NS": "it", "WIPRO.NS": "it", "HCLTECH.NS": "it", "TECHM.NS": "it",
+  "BHARTIARTL.NS": "it",
+  "SUNPHARMA.NS": "it", "DRREDDY.NS": "pharma", "CIPLA.NS": "pharma",
+  "APOLLOHOSP.NS": "pharma", "DIVISLAB.NS": "pharma",
+  "TATAMOTORS.NS": "auto", "MARUTI.NS": "auto", "EICHERMOT.NS": "auto",
+  "HEROMOTOCO.NS": "auto", "M&M.NS": "auto",
+  "HINDUNILVR.NS": "fmcg", "ITC.NS": "fmcg", "NESTLEIND.NS": "fmcg",
+  "BRITANNIA.NS": "fmcg", "TATACONSUM.NS": "fmcg",
+  "RELIANCE.NS": "energy", "ONGC.NS": "energy", "NTPC.NS": "energy",
+  "POWERGRID.NS": "energy", "BPCL.NS": "energy", "COALINDIA.NS": "energy",
+  "JSWSTEEL.NS": "metals", "TATASTEEL.NS": "metals", "HINDALCO.NS": "metals",
+  "LT.NS": "infra", "ULTRACEMCO.NS": "infra", "GRASIM.NS": "infra",
+  "ADANIENT.NS": "infra", "ADANIPORTS.NS": "infra", "ASIANPAINT.NS": "infra",
+  "TITAN.NS": "fmcg",
+  "SBILIFE.NS": "insurance", "HDFCLIFE.NS": "insurance",
+  "NIFTYBEES.NS": "etf", "BANKBEES.NS": "etf", "GOLDBEES.NS": "etf",
+  "ITBEES.NS": "etf", "JUNIORBEES.NS": "etf",
+};
+
+// Fix: SUNPHARMA should be pharma
+SYMBOL_SECTORS["SUNPHARMA.NS"] = "pharma";
+
+const sectorLabels: Record<Sector, string> = {
+  all: "All", banking: "Banking", it: "IT", pharma: "Pharma", auto: "Auto",
+  fmcg: "FMCG", energy: "Energy", metals: "Metals", infra: "Infra",
+  insurance: "Insurance", etf: "ETF",
+};
+
 const riskLevel = (symbol: string): string => {
   if (symbol.includes("GOLDBEES") || symbol.includes("NIFTYBEES")) return "Low";
   if (symbol.includes("BAJFINANCE") || symbol.includes("TATAMOTORS")) return "High";
