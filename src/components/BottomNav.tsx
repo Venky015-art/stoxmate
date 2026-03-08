@@ -1,18 +1,20 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, TrendingUp, PieChart, BookOpen, User } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const tabs = [
-  { path: "/home", label: "Home", icon: Home },
-  { path: "/invest", label: "Invest", icon: TrendingUp },
-  { path: "/portfolio", label: "Portfolio", icon: PieChart },
-  { path: "/learn", label: "Learn", icon: BookOpen },
-  { path: "/profile", label: "Profile", icon: User },
+  { path: "/home", key: "home" as const, icon: Home },
+  { path: "/invest", key: "invest" as const, icon: TrendingUp },
+  { path: "/portfolio", key: "portfolio" as const, icon: PieChart },
+  { path: "/learn", key: "learn" as const, icon: BookOpen },
+  { path: "/profile", key: "profile" as const, icon: User },
 ];
 
 const BottomNav = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/90 backdrop-blur-xl safe-bottom">
@@ -44,7 +46,7 @@ const BottomNav = () => {
                   isActive ? "text-foreground" : "text-muted-foreground/60"
                 }`}
               >
-                {tab.label}
+                {t(tab.key)}
               </span>
             </button>
           );

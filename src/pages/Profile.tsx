@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Globe, Moon, Sun, ChevronRight, LogOut, Shield, HelpCircle } from "lucide-react";
+import { User, Moon, Sun, ChevronRight, LogOut, Shield, HelpCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage, type Lang } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 
-const languages = ["English", "తెలుగు", "हिन्दी"];
+const languages: { code: Lang; label: string }[] = [
+  { code: "en", label: "English" },
+  { code: "te", label: "తెలుగు" },
+  { code: "hi", label: "हिन्दी" },
+];
 
 const Profile = () => {
   const { user, signOut } = useAuth();
+  const { lang, setLang, t } = useLanguage();
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(document.documentElement.classList.contains("dark"));
-  const [lang, setLang] = useState("English");
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -22,12 +27,12 @@ const Profile = () => {
     navigate("/");
   };
 
-  const displayName = user?.user_metadata?.full_name || user?.phone || "Investor";
+  const displayName = user?.user_metadata?.full_name || user?.phone || t("investor");
   const displayContact = user?.email || user?.phone || "";
 
   return (
     <div className="space-y-6 px-5 pb-4 pt-8">
-      <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Profile</h1>
+      <h1 className="font-display text-xl font-bold tracking-tight text-foreground">{t("profile")}</h1>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -45,18 +50,18 @@ const Profile = () => {
 
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <h3 className="mb-2.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Language
+          {t("language")}
         </h3>
         <div className="flex gap-1.5">
           {languages.map((l) => (
             <button
-              key={l}
-              onClick={() => setLang(l)}
+              key={l.code}
+              onClick={() => setLang(l.code)}
               className={`rounded-full px-4 py-2 text-xs font-semibold transition-all ${
-                lang === l ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:text-foreground"
+                lang === l.code ? "bg-foreground text-background" : "bg-secondary text-muted-foreground hover:text-foreground"
               }`}
             >
-              {l}
+              {l.label}
             </button>
           ))}
         </div>
@@ -69,7 +74,7 @@ const Profile = () => {
         >
           <div className="flex items-center gap-3">
             {isDark ? <Moon className="h-4 w-4 text-muted-foreground" /> : <Sun className="h-4 w-4 text-warning" />}
-            <span className="text-sm font-medium text-foreground">{isDark ? "Dark Mode" : "Light Mode"}</span>
+            <span className="text-sm font-medium text-foreground">{isDark ? t("darkMode") : t("lightMode")}</span>
           </div>
           <div className={`flex h-6 w-11 items-center rounded-full p-0.5 transition-colors ${isDark ? "bg-foreground" : "bg-border"}`}>
             <div className={`h-5 w-5 rounded-full bg-background shadow-sm transition-transform ${isDark ? "translate-x-5" : "translate-x-0"}`} />
@@ -79,8 +84,8 @@ const Profile = () => {
 
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-1.5">
         {[
-          { icon: Shield, label: "Privacy & Security" },
-          { icon: HelpCircle, label: "Help & Support" },
+          { icon: Shield, label: t("privacySecurity") },
+          { icon: HelpCircle, label: t("helpSupport") },
         ].map((item) => (
           <button
             key={item.label}
@@ -101,7 +106,7 @@ const Profile = () => {
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-destructive/15 bg-destructive/5 p-4 text-sm font-semibold text-destructive hover:bg-destructive/10 transition-colors"
         >
           <LogOut className="h-4 w-4" />
-          Sign Out
+          {t("signOut")}
         </button>
       </motion.div>
     </div>
