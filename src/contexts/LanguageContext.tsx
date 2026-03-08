@@ -35,6 +35,7 @@ const translations = {
   stocks: { en: "Stocks", te: "స్టాక్స్", hi: "स्टॉक्स" },
   etfs: { en: "ETFs", te: "ETFs", hi: "ETFs" },
   mutualFunds: { en: "Mutual Funds", te: "మ్యూచువల్ ఫండ్స్", hi: "म्यूचुअल फंड" },
+  watchlist: { en: "Watchlist", te: "వాచ్‌లిస్ట్", hi: "वॉचलिस्ट" },
   noResults: { en: "No results found", te: "ఫలితాలు కనుగొనబడలేదు", hi: "कोई परिणाम नहीं" },
   dataDelayed: { en: "Data may be delayed up to 15 minutes", te: "డేటా 15 నిమిషాల వరకు ఆలస్యం కావచ్చు", hi: "डेटा 15 मिनट तक विलंबित हो सकता है" },
 

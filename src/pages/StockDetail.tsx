@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight, ArrowDownRight, TrendingUp, Shield, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ArrowDownRight, TrendingUp, Shield, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useChartData } from "@/hooks/useMarketData";
+import { useWatchlist } from "@/hooks/useWatchlist";
+import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
@@ -36,14 +38,23 @@ const formatVolume = (v: number | undefined) => {
 const StockDetail = () => {
   const { symbol } = useParams<{ symbol: string }>();
   const navigate = useNavigate();
-  const [activeRange, setActiveRange] = useState(2); // default 1M
+  const [activeRange, setActiveRange] = useState(2);
+  const { user } = useAuth();
+  const { isWatched, toggle } = useWatchlist();
 
   const decodedSymbol = decodeURIComponent(symbol || "");
+  const watched = isWatched(decodedSymbol);
   const { quote, history, loading } = useChartData(
     decodedSymbol,
     RANGES[activeRange].range,
     RANGES[activeRange].interval
   );
+
+  const handleToggleWatchlist = async () => {
+    if (!user) { toast.error("Please sign in to use watchlist"); return; }
+    const added = await toggle(decodedSymbol);
+    toast.success(added ? "Added to watchlist ⭐" : "Removed from watchlist");
+  };
 
   const isUp = (quote?.change ?? 0) >= 0;
   const chartColor = isUp ? "hsl(var(--success))" : "hsl(var(--destructive))";
@@ -73,6 +84,9 @@ const StockDetail = () => {
               <p className="text-xs text-muted-foreground">{decodedSymbol}</p>
             </div>
           )}
+          <button onClick={handleToggleWatchlist} className="rounded-xl bg-secondary p-2 transition-colors hover:bg-secondary/80">
+            <Star className={`h-5 w-5 ${watched ? "fill-warning text-warning" : "text-muted-foreground"}`} />
+          </button>
         </div>
       </div>
 

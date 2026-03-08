@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Shield, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react";
+import { Search, Shield, Sparkles, RefreshCw, ArrowUpRight, ArrowDownRight, TrendingUp, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMarketData, type MarketQuote } from "@/hooks/useMarketData";
 import { useMutualFunds, type MutualFund } from "@/hooks/useMutualFunds";
+import { useWatchlist } from "@/hooks/useWatchlist";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const categoryKeys = ["all", "stocks", "etfs", "mutualFunds"] as const;
+const categoryKeys = ["all", "watchlist", "stocks", "etfs", "mutualFunds"] as const;
 
 const sectorKeys = ["all", "banking", "it", "pharma", "auto", "fmcg", "energy", "metals", "infra", "insurance", "etf"] as const;
 type Sector = typeof sectorKeys[number];
@@ -251,13 +252,18 @@ const Invest = () => {
   const { t } = useLanguage();
   const { data: quotes, loading: stocksLoading, refetch: refetchStocks } = useMarketData(ALL_SYMBOLS);
   const { data: mutualFunds, loading: mfLoading, refetch: refetchMF } = useMutualFunds();
+  const { symbols: watchlistSymbols, loading: wlLoading } = useWatchlist();
 
-  const catMap = { all: "All", stocks: "Stocks", etfs: "ETFs", mutualFunds: "Mutual Funds" };
-  const showStocks = active === "all" || active === "stocks" || active === "etfs";
+  const showStocks = active === "all" || active === "stocks" || active === "etfs" || active === "watchlist";
   const showMF = active === "all" || active === "mutualFunds";
 
   const filteredStocks = quotes.filter((q: MarketQuote) => {
     if (q.type === "index") return false;
+    if (active === "watchlist") {
+      const matchSearch = q.name.toLowerCase().includes(search.toLowerCase()) ||
+        q.symbol.toLowerCase().includes(search.toLowerCase());
+      return watchlistSymbols.includes(q.symbol) && matchSearch;
+    }
     const matchCat =
       active === "all" ||
       (active === "stocks" && q.type === "stock") ||
@@ -317,7 +323,7 @@ const Invest = () => {
         ))}
       </div>
 
-      {showStocks && (
+      {showStocks && active !== "watchlist" && (
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {sectorKeys.map((s) => (
             <button
@@ -335,7 +341,15 @@ const Invest = () => {
         </div>
       )}
 
-      {showStocks && (
+      {active === "watchlist" && !wlLoading && filteredStocks.length === 0 && (
+        <div className="flex flex-col items-center gap-2 py-16">
+          <Star className="h-8 w-8 text-muted-foreground/30" />
+          <p className="text-sm text-muted-foreground">{t("noResults")}</p>
+          <p className="text-xs text-muted-foreground/60">Star stocks from detail pages to add them here</p>
+        </div>
+      )}
+
+      {showStocks && (active !== "watchlist" || filteredStocks.length > 0) && (
         <div className="space-y-2.5">
           {stocksLoading && quotes.length === 0
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`s-${i}`} />)
