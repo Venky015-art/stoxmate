@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight, ArrowDownRight, TrendingUp, Shield, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ArrowDownRight, TrendingUp, Shield, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useChartData } from "@/hooks/useMarketData";
+import { useWatchlist } from "@/hooks/useWatchlist";
+import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
