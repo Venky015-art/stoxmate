@@ -4,19 +4,57 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TrendingUp, Smartphone } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
+import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSendOtp = () => {
-    if (phone.length >= 10) setOtpSent(true);
+  const handleSendOtp = async () => {
+    if (phone.length < 10) return;
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      phone: `+91${phone}`,
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setOtpSent(true);
+      toast.success("OTP sent!");
+    }
   };
 
-  const handleVerify = () => {
-    if (otp.length >= 4) navigate("/risk-profile");
+  const handleVerify = async () => {
+    if (otp.length < 6) return;
+    setLoading(true);
+    const { error } = await supabase.auth.verifyOtp({
+      phone: `+91${phone}`,
+      token: otp,
+      type: "sms",
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      navigate("/home");
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin + "/home",
+    });
+    setLoading(false);
+    if (result.error) {
+      toast.error(result.error instanceof Error ? result.error.message : "Google sign-in failed");
+    }
   };
 
   return (
@@ -68,11 +106,11 @@ const Auth = () => {
             </div>
             <Button
               onClick={handleSendOtp}
-              disabled={phone.length < 10}
+              disabled={phone.length < 10 || loading}
               className="w-full rounded-2xl py-6 text-base font-semibold"
             >
               <Smartphone className="mr-2 h-4 w-4" />
-              Send OTP
+              {loading ? "Sending..." : "Send OTP"}
             </Button>
           </div>
         ) : (
@@ -86,13 +124,13 @@ const Auth = () => {
             />
             <Button
               onClick={handleVerify}
-              disabled={otp.length < 4}
+              disabled={otp.length < 6 || loading}
               className="w-full rounded-2xl py-6 text-base font-semibold"
             >
-              Verify & Continue
+              {loading ? "Verifying..." : "Verify & Continue"}
             </Button>
             <button
-              onClick={() => setOtpSent(false)}
+              onClick={() => { setOtpSent(false); setOtp(""); }}
               className="w-full text-center text-sm text-muted-foreground"
             >
               Change number
@@ -108,7 +146,8 @@ const Auth = () => {
 
         <Button
           variant="outline"
-          onClick={() => navigate("/risk-profile")}
+          onClick={handleGoogleLogin}
+          disabled={loading}
           className="w-full rounded-2xl py-6 text-base font-medium border-border"
         >
           <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">

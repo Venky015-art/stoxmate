@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { User, Globe, Moon, Sun, ChevronRight, LogOut, Shield, HelpCircle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const languages = ["English", "తెలుగు", "हिन्दी"];
 
 const Profile = () => {
-  const [isDark, setIsDark] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [isDark, setIsDark] = useState(document.documentElement.classList.contains("dark"));
   const [lang, setLang] = useState("English");
 
   const toggleTheme = () => {
@@ -13,11 +17,18 @@ const Profile = () => {
     document.documentElement.classList.toggle("dark");
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  const displayName = user?.user_metadata?.full_name || user?.phone || "Investor";
+  const displayContact = user?.email || user?.phone || "";
+
   return (
     <div className="space-y-6 px-5 pb-4 pt-6">
       <h1 className="font-display text-xl font-bold text-foreground">Profile</h1>
 
-      {/* User Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -27,12 +38,11 @@ const Profile = () => {
           <User className="h-7 w-7 text-primary" />
         </div>
         <div>
-          <h3 className="font-display text-base font-bold text-foreground">Investor</h3>
-          <p className="text-sm text-muted-foreground">+91 98765 43210</p>
+          <h3 className="font-display text-base font-bold text-foreground">{displayName}</h3>
+          <p className="text-sm text-muted-foreground">{displayContact}</p>
         </div>
       </motion.div>
 
-      {/* Language */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
           <Globe className="h-4 w-4" /> Language
@@ -52,7 +62,6 @@ const Profile = () => {
         </div>
       </motion.div>
 
-      {/* Theme */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
         <button
           onClick={toggleTheme}
@@ -68,7 +77,6 @@ const Profile = () => {
         </button>
       </motion.div>
 
-      {/* Menu Items */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-2">
         {[
           { icon: Shield, label: "Privacy & Security" },
@@ -87,9 +95,11 @@ const Profile = () => {
         ))}
       </motion.div>
 
-      {/* Logout */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-        <button className="flex w-full items-center justify-center gap-2 rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm font-semibold text-destructive">
+        <button
+          onClick={handleSignOut}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-destructive/20 bg-destructive/5 p-4 text-sm font-semibold text-destructive"
+        >
           <LogOut className="h-4 w-4" />
           Sign Out
         </button>
