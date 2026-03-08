@@ -80,7 +80,9 @@ const topResources = [
   },
 ];
 
-const Learn = () => (
+const Learn = () => {
+  const navigate = useNavigate();
+  return (
   <div className="space-y-7 px-5 pb-4 pt-8">
     <div>
       <h1 className="font-display text-xl font-bold tracking-tight text-foreground">Learn</h1>
