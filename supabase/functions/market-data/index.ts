@@ -6,19 +6,6 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Indian market symbols
-const SYMBOLS: Record<string, string[]> = {
-  indices: ["^NSEI", "^BSESN", "^NSEBANK"],
-  stocks: [
-    "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
-    "HINDUNILVR.NS", "ITC.NS", "SBIN.NS", "BHARTIARTL.NS", "KOTAKBANK.NS",
-    "LT.NS", "AXISBANK.NS", "WIPRO.NS", "BAJFINANCE.NS", "TATAMOTORS.NS",
-  ],
-  etfs: [
-    "NIFTYBEES.NS", "BANKBEES.NS", "GOLDBEES.NS", "ITBEES.NS", "JUNIORBEES.NS",
-  ],
-};
-
 const DISPLAY_NAMES: Record<string, string> = {
   "^NSEI": "NIFTY 50",
   "^BSESN": "SENSEX",
@@ -45,45 +32,55 @@ const DISPLAY_NAMES: Record<string, string> = {
   "JUNIORBEES.NS": "Junior Nifty ETF",
 };
 
-async function fetchQuotes(symbols: string[]) {
-  const joined = symbols.join(",");
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(joined)}`;
+const INDEX_SYMBOLS = ["^NSEI", "^BSESN", "^NSEBANK"];
+const ETF_SYMBOLS = ["NIFTYBEES.NS", "BANKBEES.NS", "GOLDBEES.NS", "ITBEES.NS", "JUNIORBEES.NS"];
 
+async function fetchChartData(symbol: string, range = "5d", interval = "1d") {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}&includePrePost=false`;
+  
   const response = await fetch(url, {
     headers: {
-      "User-Agent": "Mozilla/5.0",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      "Accept": "application/json",
     },
   });
 
   if (!response.ok) {
-    console.error("Yahoo Finance API error:", response.status);
-    throw new Error(`Yahoo API returned ${response.status}`);
+    console.error(`Chart API error for ${symbol}: ${response.status}`);
+    return null;
   }
 
   const data = await response.json();
-  return data.quoteResponse?.result || [];
+  return data.chart?.result?.[0] || null;
 }
 
-async function fetchChart(symbol: string, range = "1mo", interval = "1d") {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
+function extractQuoteFromChart(symbol: string, chartResult: any) {
+  const meta = chartResult.meta;
+  const price = meta.regularMarketPrice;
+  const previousClose = meta.chartPreviousClose || meta.previousClose;
+  const change = price - previousClose;
+  const changePercent = previousClose ? (change / previousClose) * 100 : 0;
 
-  const response = await fetch(url, {
-    headers: { "User-Agent": "Mozilla/5.0" },
-  });
+  return {
+    symbol,
+    name: DISPLAY_NAMES[symbol] || meta.shortName || symbol.replace(".NS", ""),
+    price: Math.round(price * 100) / 100,
+    change: Math.round(change * 100) / 100,
+    changePercent: Math.round(changePercent * 100) / 100,
+    previousClose,
+    currency: meta.currency || "INR",
+    type: INDEX_SYMBOLS.includes(symbol) ? "index" : ETF_SYMBOLS.includes(symbol) ? "etf" : "stock",
+  };
+}
 
-  if (!response.ok) return null;
-
-  const data = await response.json();
-  const result = data.chart?.result?.[0];
-  if (!result) return null;
-
-  const timestamps = result.timestamp || [];
-  const closes = result.indicators?.quote?.[0]?.close || [];
-
+function extractHistoryFromChart(chartResult: any) {
+  const timestamps = chartResult.timestamp || [];
+  const closes = chartResult.indicators?.quote?.[0]?.close || [];
+  
   return timestamps.map((t: number, i: number) => ({
     time: t * 1000,
-    close: closes[i] ?? null,
-  })).filter((p: { close: number | null }) => p.close !== null);
+    close: closes[i] != null ? Math.round(closes[i] * 100) / 100 : null,
+  })).filter((p: any) => p.close !== null);
 }
 
 serve(async (req) => {
@@ -92,44 +89,44 @@ serve(async (req) => {
   }
 
   try {
-    const { type, symbols: customSymbols, range, interval } = await req.json();
+    const { type, symbols, range, interval } = await req.json();
 
-    if (type === "chart" && customSymbols?.length === 1) {
-      const chartData = await fetchChart(customSymbols[0], range || "1mo", interval || "1d");
-      return new Response(JSON.stringify({ success: true, data: chartData }), {
+    if (type === "chart" && symbols?.length === 1) {
+      const chartResult = await fetchChartData(symbols[0], range || "1mo", interval || "1d");
+      if (!chartResult) {
+        return new Response(JSON.stringify({ success: false, error: "Failed to fetch chart data" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const history = extractHistoryFromChart(chartResult);
+      const quote = extractQuoteFromChart(symbols[0], chartResult);
+      return new Response(JSON.stringify({ success: true, data: { quote, history } }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Default: fetch quotes
-    const symbolList = customSymbols || [
-      ...SYMBOLS.indices,
-      ...SYMBOLS.stocks.slice(0, 10),
-      ...SYMBOLS.etfs,
+    // Fetch quotes for multiple symbols using chart API
+    const symbolList = symbols || [
+      "^NSEI", "^BSESN", "^NSEBANK",
+      "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
+      "ITC.NS", "SBIN.NS", "BHARTIARTL.NS", "WIPRO.NS", "TATAMOTORS.NS",
+      "NIFTYBEES.NS", "GOLDBEES.NS", "ITBEES.NS",
     ];
 
-    const quotes = await fetchQuotes(symbolList);
+    const results = await Promise.allSettled(
+      symbolList.map((s: string) => fetchChartData(s, "5d", "1d"))
+    );
 
-    const formatted = quotes.map((q: any) => ({
-      symbol: q.symbol,
-      name: DISPLAY_NAMES[q.symbol] || q.shortName || q.symbol,
-      price: q.regularMarketPrice,
-      change: q.regularMarketChange,
-      changePercent: q.regularMarketChangePercent,
-      previousClose: q.regularMarketPreviousClose,
-      dayHigh: q.regularMarketDayHigh,
-      dayLow: q.regularMarketDayLow,
-      volume: q.regularMarketVolume,
-      marketCap: q.marketCap,
-      currency: q.currency || "INR",
-      type: SYMBOLS.indices.includes(q.symbol)
-        ? "index"
-        : SYMBOLS.etfs.includes(q.symbol)
-        ? "etf"
-        : "stock",
-    }));
+    const quotes = results
+      .map((r, i) => {
+        if (r.status === "fulfilled" && r.value) {
+          return extractQuoteFromChart(symbolList[i], r.value);
+        }
+        return null;
+      })
+      .filter(Boolean);
 
-    return new Response(JSON.stringify({ success: true, data: formatted }), {
+    return new Response(JSON.stringify({ success: true, data: quotes }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
