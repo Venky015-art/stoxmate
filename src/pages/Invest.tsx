@@ -123,7 +123,6 @@ const Invest = () => {
                   onClick={() => navigate(`/stock/${encodeURIComponent(q.symbol)}`)}
                   className="cursor-pointer rounded-2xl border border-border bg-card p-4 shadow-card transition-shadow hover:shadow-card-hover"
                 >
-                >
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center gap-2">
