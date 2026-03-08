@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { BookOpen, TrendingUp, PieChart, Shield, Clock, ChevronRight, ExternalLink, Star, Globe } from "lucide-react";
 
 const topics = [
