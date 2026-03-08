@@ -148,6 +148,8 @@ const StockCard = ({
   const isAiPick = aiPicks.includes(q.symbol);
   const isUp = q.change >= 0;
   const data = sparkline(q.price, q.change);
+  const sectorStyle = SECTOR_ICONS[q.symbol] || DEFAULT_ICON;
+  const SectorIcon = sectorStyle.icon;
 
   return (
     <motion.div
